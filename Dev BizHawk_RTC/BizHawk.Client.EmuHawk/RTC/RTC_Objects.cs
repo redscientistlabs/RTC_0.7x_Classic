@@ -66,8 +66,9 @@ namespace RTC
     {
         public List<StashKey> stashkeys = new List<StashKey>();
 
-        public string Filename;
+        public string Filename = null;
         public string ShortFilename;
+		public string RtcVersion;
 
         public string descrip = "";
 
@@ -128,6 +129,8 @@ namespace RTC
                 sks.ShortFilename = RTC_Core.currentStockpile.ShortFilename;
             }
 
+			//Watermarking RTC Version
+			sks.RtcVersion = RTC_Core.RtcVersion;
 
             FileStream FS;
             BinaryFormatter bformatter = new BinaryFormatter();
@@ -207,100 +210,108 @@ namespace RTC
             Load(null, false);
         }
 
-        public static void Load(string Filename, bool CorruptCloud)
-        {
+		public static void Load(string Filename, bool CorruptCloud)
+		{
 
-            //clean temp folder
-            foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP"))
-                File.Delete(file);
+			//clean temp folder
+			foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP"))
+				File.Delete(file);
 
-            if (Filename == null)
-            {
-                OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
-                OpenFileDialog1.DefaultExt = "sks";
-                OpenFileDialog1.Title = "Open Stockpile File";
-                OpenFileDialog1.Filter = "SKS files|*.sks";
-                OpenFileDialog1.RestoreDirectory = true;
-                if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    Filename = OpenFileDialog1.FileName.ToString();
-                }
-                else
-                    return;
-            }
+			if (Filename == null)
+			{
+				OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+				OpenFileDialog1.DefaultExt = "sks";
+				OpenFileDialog1.Title = "Open Stockpile File";
+				OpenFileDialog1.Filter = "SKS files|*.sks";
+				OpenFileDialog1.RestoreDirectory = true;
+				if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+				{
+					Filename = OpenFileDialog1.FileName.ToString();
+				}
+				else
+					return;
+			}
 
-            if (!File.Exists(Filename))
-            {
-                MessageBox.Show("The Stockpile file wasn't found");
-                return;
-            }
+			if (!File.Exists(Filename))
+			{
+				MessageBox.Show("The Stockpile file wasn't found");
+				return;
+			}
 
-            //7z extract part
+			//7z extract part
 
-            string[] stringargs = { "-x", Filename, RTC_Core.rtcDir + "\\TEMP\\" };
+			string[] stringargs = { "-x", Filename, RTC_Core.rtcDir + "\\TEMP\\" };
 
-            FastZipProgram.Exec(stringargs);
+			FastZipProgram.Exec(stringargs);
 
-            if (!File.Exists(RTC_Core.rtcDir + "\\TEMP\\master.sk"))
-            {
-                MessageBox.Show("The file could not be read properly");
-                return;
-            }
-
-
-
-            //stockpile part
-            FileStream FS;
-            BinaryFormatter bformatter = new BinaryFormatter();
-
-            Stockpile sks;
-            bformatter = new BinaryFormatter();
-
-            try
-            {
-                FS = File.Open(RTC_Core.rtcDir + "\\TEMP\\master.sk", FileMode.OpenOrCreate);
-                sks = (Stockpile)bformatter.Deserialize(FS);
-                FS.Close();
-            }
-            catch
-            {
-                MessageBox.Show("The Stockpile file could not be loaded");
-                return;
-            }
-
-            RTC_Core.currentStockpile = sks;
-
-            // repopulating savestates out of temp folder
-            foreach (StashKey key in sks.stashkeys)
-            {
-
-                string statefilename = key.GameName + "." + key.ParentKey + ".timejump.State"; // get savestate name
-
-                if (!File.Exists(RTC_Core.bizhawkDir + "\\" + key.GameSystem + "\\State\\" + statefilename))
-                    File.Copy(RTC_Core.rtcDir + "\\TEMP\\" + statefilename, RTC_Core.bizhawkDir + "\\" + key.GameSystem + "\\State\\" + statefilename); // copy savestates to temp folder
-            }
+			if (!File.Exists(RTC_Core.rtcDir + "\\TEMP\\master.sk"))
+			{
+				MessageBox.Show("The file could not be read properly");
+				return;
+			}
 
 
-            for (int i = 0; i < sks.stashkeys.Count; i++)
-            {
-                sks.stashkeys[i].RomFile = RTC_Core.rtcDir + "\\TEMP\\" + sks.stashkeys[i].RomFile;
-            }
+
+			//stockpile part
+			FileStream FS;
+			BinaryFormatter bformatter = new BinaryFormatter();
+
+			Stockpile sks;
+			bformatter = new BinaryFormatter();
+
+			try
+			{
+				FS = File.Open(RTC_Core.rtcDir + "\\TEMP\\master.sk", FileMode.OpenOrCreate);
+				sks = (Stockpile)bformatter.Deserialize(FS);
+				FS.Close();
+			}
+			catch
+			{
+				MessageBox.Show("The Stockpile file could not be loaded");
+				return;
+			}
+
+			RTC_Core.currentStockpile = sks;
+
+			// repopulating savestates out of temp folder
+			foreach (StashKey key in sks.stashkeys)
+			{
+
+				string statefilename = key.GameName + "." + key.ParentKey + ".timejump.State"; // get savestate name
+
+				if (!File.Exists(RTC_Core.bizhawkDir + "\\" + key.GameSystem + "\\State\\" + statefilename))
+					File.Copy(RTC_Core.rtcDir + "\\TEMP\\" + statefilename, RTC_Core.bizhawkDir + "\\" + key.GameSystem + "\\State\\" + statefilename); // copy savestates to temp folder
+			}
 
 
-            //fill list controls
-            RTC_Core.ghForm.lbStockpile.Items.Clear();
-
-            foreach (StashKey key in sks.stashkeys)
-            {
-                RTC_Core.ghForm.lbStockpile.Items.Add(key);
-            }
+			for (int i = 0; i < sks.stashkeys.Count; i++)
+			{
+				sks.stashkeys[i].RomFile = RTC_Core.rtcDir + "\\TEMP\\" + sks.stashkeys[i].RomFile;
+			}
 
 
-            RTC_Core.ghForm.btnSaveStockpile.Enabled = true;
-            RTC_Core.ghForm.btnSaveStockpile.BackColor = Color.Tomato;
-            sks.Filename = Filename;
+			//fill list controls
+			RTC_Core.ghForm.lbStockpile.Items.Clear();
 
-        }
+			foreach (StashKey key in sks.stashkeys)
+			{
+				RTC_Core.ghForm.lbStockpile.Items.Add(key);
+			}
+
+
+			RTC_Core.ghForm.btnSaveStockpile.Enabled = true;
+			RTC_Core.ghForm.btnSaveStockpile.BackColor = Color.Tomato;
+			sks.Filename = Filename;
+
+			if (sks.RtcVersion != RTC_Core.RtcVersion)
+			{
+				if (sks.RtcVersion == null)
+					MessageBox.Show("WARNING: You have loaded a pre-0.76b stockpile using RTC " + RTC_Core.RtcVersion + "\n Items might not appear identical to how they when they were created.");
+				else
+					MessageBox.Show("WARNING: You have loaded a stockpile created with RTC " + sks.RtcVersion + " using RTC " + RTC_Core.RtcVersion + "\n Items might not appear identical to how they when they were created.");
+			}
+
+		}
 
         public static void Import()
         {

@@ -672,11 +672,11 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(28, 13);
             this.label11.TabIndex = 86;
-            this.label11.Text = "0.76";
-            // 
-            // btnReboot
-            // 
-            this.btnReboot.BackColor = System.Drawing.Color.Black;
+			this.label11.Text = RTC_Core.RtcVersion;
+			// 
+			// btnReboot
+			// 
+			this.btnReboot.BackColor = System.Drawing.Color.Black;
             this.btnReboot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReboot.ForeColor = System.Drawing.Color.OrangeRed;
             this.btnReboot.Image = global::BizHawk.Client.EmuHawk.Properties.Resources.reboot;

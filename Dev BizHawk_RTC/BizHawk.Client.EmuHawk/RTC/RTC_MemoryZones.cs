@@ -69,7 +69,8 @@ namespace RTC
 
                     ChipBlacklist.Add("System Bus");
                     ChipBlacklist.Add("PRG ROM");
-                    ChipBlacklist.Add("CHR VROM"); //Cartridge
+					ChipBlacklist.Add("PALRAM"); //Color Memory (Useless and disgusting)
+					ChipBlacklist.Add("CHR VROM"); //Cartridge
                     ChipBlacklist.Add("Battery RAM"); //Cartridge Save Data
                     break;
 

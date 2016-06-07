@@ -15,6 +15,7 @@ namespace RTC
 
     public static class RTC_Core
     {
+		public static string RtcVersion = "0.76b";
 
         public static HexEditor hexeditor = null;
 
@@ -506,8 +507,9 @@ namespace RTC
             path = path.Replace(".QuickNes.", ".");
             path = path.Replace(".NesHawk.", ".");
             path = path.Replace(".VBA-Next.", ".");
+			path = path.Replace(".mGBA.", ".");
 
-            GlobalWin.MainForm.SaveState(path, quickSlotName, false);
+			GlobalWin.MainForm.SaveState(path, quickSlotName, false);
 
         }
 
@@ -524,6 +526,7 @@ namespace RTC
             path = path.Replace(".QuickNes.", ".");
             path = path.Replace(".NesHawk.", ".");
             path = path.Replace(".VBA-Next.", ".");
+			path = path.Replace(".mGBA.", ".");
 
             if (File.Exists(path) == false)
             {
