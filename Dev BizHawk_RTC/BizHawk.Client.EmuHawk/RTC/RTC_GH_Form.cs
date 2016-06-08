@@ -16,8 +16,8 @@ namespace RTC
     public partial class RTC_GH_Form : Form
     {
         public string currentSelectedState;
-        public string[] btnParentKeys = { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
-        public string[] btnAttachedRom = { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+        public string[] btnParentKeys = { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
+        public string[] btnAttachedRom = { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null };
 
         public bool DontLoadSelectedStash = false;
         public bool DontLoadSelectedStockpile = false;
@@ -710,8 +710,10 @@ namespace RTC
         private void btnLoadStockpile_Click(object sender, EventArgs e)
         {
             GlobalWin.Sound.StopSound();
-            Stockpile.Load();
-            GlobalWin.Sound.StartSound();
+			RTC_RPC.SendToKillSwitch("FREEZE");
+			Stockpile.Load();
+			RTC_RPC.SendToKillSwitch("UNFREEZE");
+			GlobalWin.Sound.StartSound();
 
             RTC_Restore.SaveRestore();
         }
@@ -725,19 +727,24 @@ namespace RTC
             }
 
             GlobalWin.Sound.StopSound();
+			RTC_RPC.SendToKillSwitch("FREEZE");
             Stockpile sks = new Stockpile(lbStockpile);
             Stockpile.Save(sks);
-            GlobalWin.Sound.StartSound();
+			RTC_RPC.SendToKillSwitch("UNFREEZE");
+			GlobalWin.Sound.StartSound();
 
             RTC_Restore.SaveRestore();
         }
 
         private void btnSaveStockpile_Click(object sender, EventArgs e)
         {
-            Stockpile sks = new Stockpile(lbStockpile);
+			GlobalWin.Sound.StopSound();
+			RTC_RPC.SendToKillSwitch("FREEZE");
+			Stockpile sks = new Stockpile(lbStockpile);
             Stockpile.Save(sks, true);
-
-        }
+			RTC_RPC.SendToKillSwitch("UNFREEZE");
+			GlobalWin.Sound.StartSound();
+		}
 
         public void btnBlastToggle_Click(object sender, EventArgs e)
         {

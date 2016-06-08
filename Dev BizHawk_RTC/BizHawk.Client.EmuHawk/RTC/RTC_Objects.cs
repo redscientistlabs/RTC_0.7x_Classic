@@ -213,10 +213,6 @@ namespace RTC
 		public static void Load(string Filename, bool CorruptCloud)
 		{
 
-			//clean temp folder
-			foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP"))
-				File.Delete(file);
-
 			if (Filename == null)
 			{
 				OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
@@ -237,6 +233,12 @@ namespace RTC
 				MessageBox.Show("The Stockpile file wasn't found");
 				return;
 			}
+
+
+			//clean temp folder
+			foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP"))
+				File.Delete(file);
+
 
 			//7z extract part
 
