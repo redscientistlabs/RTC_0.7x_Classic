@@ -62,10 +62,9 @@ move gitsucks\output\Firmware temp
 rmdir /s /q gitsucks
 
 rem remove UPX from any files we have checked in, because people's lousy security software hates it
-rem: wait, why did I comment this out? did it have to do with CGC not roundtripping de-UPXing? then we should just not UPX it in the first place (but it's big)
-upx -d temp\dll\*.dll
-upx -d temp\dll\*.exe
-upx -d temp\*.exe
+rem upx -d temp\dll\*.dll
+rem upx -d temp\dll\*.exe
+rem upx -d temp\*.exe
 
 cd temp
 
@@ -73,7 +72,6 @@ rem Patch up working dir with a few other things we want
 mkdir ExternalTools
 copy ..\HelloWorld_BizHawkTool.dll ExternalTools
 copy ..\HelloWorld_BizHawkTool.zip ExternalTools
-mkdir Firmware
 
 rem Build the final zip
 ..\zip.exe -X -9 -r ..\%NAME% . -i \*

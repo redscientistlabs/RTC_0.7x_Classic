@@ -308,7 +308,7 @@ namespace RTC
 			if (sks.RtcVersion != RTC_Core.RtcVersion)
 			{
 				if (sks.RtcVersion == null)
-					MessageBox.Show("WARNING: You have loaded a pre-0.76b stockpile using RTC " + RTC_Core.RtcVersion + "\n Items might not appear identical to how they when they were created.");
+					MessageBox.Show("WARNING: You have loaded a pre-0.77 stockpile using RTC " + RTC_Core.RtcVersion + "\n Items might not appear identical to how they when they were created.");
 				else
 					MessageBox.Show("WARNING: You have loaded a stockpile created with RTC " + sks.RtcVersion + " using RTC " + RTC_Core.RtcVersion + "\n Items might not appear identical to how they when they were created.");
 			}

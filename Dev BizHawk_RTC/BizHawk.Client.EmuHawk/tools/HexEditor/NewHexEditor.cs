@@ -10,13 +10,13 @@ namespace BizHawk.Client.EmuHawk
 {
 	public partial class NewHexEditor : Form, IToolFormAutoConfig
 	{
-        #region Initialize and Dependencies
+		#region Initialize and Dependencies
 
-        //RTC_HIJACK : Set MemoryDomains variable to public
-        [RequiredService]
-        public IMemoryDomains MemoryDomains { get; set; }
+		//RTC_HIJACK : Set MemoryDomains variable to public
+		[RequiredService]
+		public IMemoryDomains MemoryDomains { get; set; }
 
-        [RequiredService]
+		[RequiredService]
 		private IEmulator Emulator { get; set; }
 
 		public NewHexEditor()

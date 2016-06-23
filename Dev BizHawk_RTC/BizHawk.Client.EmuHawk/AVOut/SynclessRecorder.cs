@@ -68,9 +68,6 @@ namespace BizHawk.Client.EmuHawk
 			wwv.Dispose();
 		}
 
-		public bool UsesAudio { get { return true; } }
-		public bool UsesVideo { get { return true; } }
-
 		class DummyDisposable : IDisposable { public void Dispose() { } }
 
 		public IDisposable AcquireVideoCodecToken(IWin32Window hwnd) { return new DummyDisposable(); }

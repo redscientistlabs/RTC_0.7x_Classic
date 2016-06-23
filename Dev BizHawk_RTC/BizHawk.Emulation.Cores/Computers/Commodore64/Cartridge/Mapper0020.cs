@@ -26,34 +26,19 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cartridge
     {
         private sealed class Mapper0020 : CartridgeDevice
         {
-            [SaveState.SaveWithName("BankOffset")]
             private int _bankOffset = 63 << 13;
-            [SaveState.DoNotSave]
-            private int[] _banksA = new int[64 << 13]; //8000
-            [SaveState.DoNotSave]
-            private int[] _banksB = new int[64 << 13]; //A000
-            [SaveState.DoNotSave]
-            private readonly int[] _originalMediaA; //8000
-            [SaveState.DoNotSave]
-            private readonly int[] _originalMediaB; //A000
-            [SaveState.SaveWithName("BoardLed")]
+            private readonly int[] _banksA = new int[64 << 13]; //8000
+            private readonly int[] _banksB = new int[64 << 13]; //A000
             private bool _boardLed;
-            [SaveState.SaveWithName("Jumper")]
             private bool _jumper = false;
-            [SaveState.SaveWithName("StateBits")]
             private int _stateBits;
-            [SaveState.SaveWithName("RAM")]
             private readonly int[] _ram = new int[256];
-            [SaveState.SaveWithName("CommandLatch55")]
             private bool _commandLatch55;
-            [SaveState.SaveWithName("CommandLatchAA")]
             private bool _commandLatchAa;
-            [SaveState.SaveWithName("InternalROMState")]
             private int _internalRomState;
 
             public Mapper0020(IList<int> newAddresses, IList<int> newBanks, IList<int[]> newData)
             {
-                DriveLightEnabled = true;
                 var count = newAddresses.Count;
 
                 // force ultimax mode (the cart SHOULD set this
@@ -90,10 +75,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cartridge
                 _commandLatch55 = false;
                 _commandLatchAa = false;
                 _internalRomState = 0;
-
-                // back up original media
-                _originalMediaA = _banksA.Select(d => d).ToArray();
-                _originalMediaB = _banksB.Select(d => d).ToArray();
             }
 
             private void BankSet(int index)
@@ -195,7 +176,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cartridge
                 pinExRom = (val & 0x02) == 0;
                 _boardLed = (val & 0x80) != 0;
                 _internalRomState = 0;
-                DriveLightOn = _boardLed;
             }
 
             public override void Write8000(int addr, int val)
@@ -284,14 +264,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cartridge
             public override void WriteDF00(int addr, int val)
             {
                 _ram[addr] = val & 0xFF;
-            }
-
-            public override void SyncState(Serializer ser)
-            {
-                SaveState.SyncDelta("MediaStateA", ser, _originalMediaA, ref _banksA);
-                SaveState.SyncDelta("MediaStateB", ser, _originalMediaB, ref _banksB);
-                base.SyncState(ser);
-                DriveLightOn = _boardLed;
             }
         }
     }

@@ -23,11 +23,11 @@ namespace BizHawk.Client.EmuHawk
 	// int to long TODO: 32 bit domains have more digits than the hex editor can account for and the address covers up the 0 column
 	public partial class HexEditor : ToolFormBase, IToolFormAutoConfig
 	{
-        //RTC_HIJACK : set MemoryDomains property to public
-        [RequiredService]
-        public IMemoryDomains MemoryDomains { get; set; }
+		//RTC_HIJACK : set MemoryDomains property to public
+		[RequiredService]
+		public IMemoryDomains MemoryDomains { get; set; }
 
-        [RequiredService]
+		[RequiredService]
 		private IEmulator Emulator { get; set; }
 
 		private int fontWidth;
@@ -48,8 +48,8 @@ namespace BizHawk.Client.EmuHawk
 
 		private long _maxRow;
 
-        //RTC_HIJACK : Set _domain variable to public
-        public MemoryDomain _domain = new MemoryDomain(
+		//RTC_HIJACK : Set _domain variable to public
+		public MemoryDomain _domain = new MemoryDomain(
 			"NULL", 1024, MemoryDomain.Endian.Little, addr => 0, delegate(long a, byte v) { v = 0; });
 
 		private long _row;
@@ -93,10 +93,9 @@ namespace BizHawk.Client.EmuHawk
 			AddressesLabel.Font = font;
 			AddressLabel.Font = font;
 
-            //RTC_HIJACK : Send back Hexeditor reference to RTC_Core
-            RTC.RTC_Core.hexeditor = this;
-
-        }
+			//RTC_HIJACK : Send back Hexeditor reference to RTC_Core
+			RTC.RTC_Core.hexeditor = this;
+		}
 
 		private long? HighlightedAddress
 		{
@@ -744,8 +743,8 @@ namespace BizHawk.Client.EmuHawk
 			return Global.CheatList.IsActive(_domain, address);
 		}
 
-        //RTC_HIJACK : set UnFreezeAddress() method public
-        public void UnFreezeAddress(long address)
+		//RTC_HIJACK : set UnFreezeAddress() method public
+		public void UnFreezeAddress(long address)
 		{
 			if (address >= 0) 
 			{
@@ -757,10 +756,10 @@ namespace BizHawk.Client.EmuHawk
 			MemoryViewerBox.Refresh();
 		}
 
-        // TODO refactor to int?
-        //RTC_HIJACK : add freezename variable to FreezeAddress()
-        public void FreezeAddress(long address, string freezename = "")
-        {
+		// TODO refactor to int?
+		//RTC_HIJACK : add freezename variable to FreezeAddress() and make method public
+		public void FreezeAddress(long address, string freezename = "")
+		{
 			if (address >= 0)
 			{
 				var watch = Watch.GenerateWatch(
@@ -768,9 +767,9 @@ namespace BizHawk.Client.EmuHawk
 					address,
 					WatchSize,
 					Client.Common.DisplayType.Hex,
-                    BigEndian,
-                    //RTC_HIJACK : change string.empty to freezename
-                    freezename);
+					BigEndian,
+					//RTC_HIJACK : change string.empty to freezename
+					freezename);
 
 				Global.CheatList.Add(new Cheat(
 					watch,

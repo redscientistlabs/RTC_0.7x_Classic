@@ -87,10 +87,10 @@ namespace BizHawk.Client.EmuHawk
 			var c3 = new Controller(UserIndex.Three);
 			var c4 = new Controller(UserIndex.Four);
 
-			if (c1.IsConnected) Devices.Add(new GamePad360(0,c1));
-			if (c2.IsConnected) Devices.Add(new GamePad360(1,c2));
-			if (c3.IsConnected) Devices.Add(new GamePad360(2,c3));
-			if (c4.IsConnected) Devices.Add(new GamePad360(3,c4));
+			if (c1.IsConnected) Devices.Add(new GamePad360(c1));
+			if (c2.IsConnected) Devices.Add(new GamePad360(c2));
+			if (c3.IsConnected) Devices.Add(new GamePad360(c3));
+			if (c4.IsConnected) Devices.Add(new GamePad360(c4));
 		}
 
 		public static void UpdateAll()
@@ -103,14 +103,10 @@ namespace BizHawk.Client.EmuHawk
 		// ********************************** Instance Members **********************************
 
 		readonly Controller controller;
-        uint index0;
 		XINPUT_STATE state;
 
-        public int PlayerNumber { get { return (int)index0 + 1; } }
-
-		GamePad360(uint index0, Controller c)
+		GamePad360(Controller c)
 		{
-            this.index0 = index0;
 			controller = c;
 			InitializeButtons();
 			Update();
@@ -124,7 +120,7 @@ namespace BizHawk.Client.EmuHawk
 			if (XInputGetStateExProc != null)
 			{
 				state = new XINPUT_STATE();
-				XInputGetStateExProc(index0, out state);
+				XInputGetStateExProc(0, out state);
 			}
 			else
 			{
@@ -156,7 +152,7 @@ namespace BizHawk.Client.EmuHawk
 		private readonly List<string> names = new List<string>();
 		private readonly List<Func<bool>> actions = new List<Func<bool>>();
 
-        void InitializeButtons()
+		void InitializeButtons()
 		{
 			const int dzp = 9000;
 			const int dzn = -9000;
@@ -168,7 +164,7 @@ namespace BizHawk.Client.EmuHawk
 			AddItem("Y", () => (state.Gamepad.wButtons & unchecked((ushort)GamepadButtonFlags.Y)) != 0);
 			AddItem("Guide", () => (state.Gamepad.wButtons & 1024) != 0);
 
-            AddItem("Start", () => (state.Gamepad.wButtons & (ushort)GamepadButtonFlags.Start) != 0);
+			AddItem("Start", () => (state.Gamepad.wButtons & (ushort)GamepadButtonFlags.Start) != 0);
 			AddItem("Back", () => (state.Gamepad.wButtons & (ushort)GamepadButtonFlags.Back) != 0);
 			AddItem("LeftThumb", () => (state.Gamepad.wButtons & (ushort)GamepadButtonFlags.LeftThumb) != 0);
 			AddItem("RightThumb", () => (state.Gamepad.wButtons & (ushort)GamepadButtonFlags.RightThumb) != 0);

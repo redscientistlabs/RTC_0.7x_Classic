@@ -26,7 +26,7 @@ namespace MDFN_IEN_WSWAN
 	GFX::GFX()
 		:LayerEnabled(7) // 1 = bg, 2 = fg, 4 = sprite
 	{
-		//SetPixelFormat();
+		SetPixelFormat();
 	}
 
 
@@ -239,16 +239,6 @@ namespace MDFN_IEN_WSWAN
 		LayerEnabled = mask;
 	}
 
-	void GFX::SetBWPalette(const uint32 *colors)
-	{
-		std::memcpy(ColorMapG, colors, sizeof(ColorMapG));
-	}
-	void GFX::SetColorPalette(const uint32 *colors)
-	{
-		std::memcpy(ColorMap, colors, sizeof(ColorMap));
-	}
-
-	/*
 	void GFX::SetPixelFormat()
 	{
 		for(int r = 0; r < 16; r++)
@@ -278,7 +268,7 @@ namespace MDFN_IEN_WSWAN
 				}
 			}
 		}
-	}*/
+	}
 
 	void GFX::Scanline(uint32 *target)
 	{
@@ -636,11 +626,10 @@ namespace MDFN_IEN_WSWAN
 		NSS(wsColors);
 		NSS(wsCols);
 
-		/* non-sync settings related to output
-		NSS(ColorMapG); // b&w color output
-		NSS(ColorMap); // color color output
-		NSS(LayerEnabled); // layer enable mask
-		*/
+		NSS(ColorMapG);
+		NSS(ColorMap);
+		NSS(LayerEnabled);
+
 		NSS(wsLine);
 
 		NSS(SpriteTable);

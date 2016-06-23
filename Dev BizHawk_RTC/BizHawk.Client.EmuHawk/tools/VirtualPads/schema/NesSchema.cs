@@ -5,7 +5,6 @@ using System.Linq;
 using BizHawk.Client.Common;
 using BizHawk.Emulation.Cores.Nintendo.NES;
 using BizHawk.Emulation.Cores.Consoles.Nintendo.QuickNES;
-using System;
 namespace BizHawk.Client.EmuHawk
 {
 	[SchemaAttributes("NES")]
@@ -76,8 +75,6 @@ namespace BizHawk.Client.EmuHawk
 							yield return PowerPad(1);
 							currentControlerNo++;
 							break;
-						case "ControllerSNES":
-							throw new Exception("TODO");
 					}
 
 					switch (ss.Controls.NesRightPort)
@@ -102,8 +99,6 @@ namespace BizHawk.Client.EmuHawk
 						case "PowerPad":
 							yield return PowerPad(currentControlerNo);
 							break;
-						case "ControllerSNES":
-							throw new Exception("TODO");
 					}
 
 					if (currentControlerNo == 0)

@@ -17,7 +17,7 @@ namespace BizHawk.Emulation.Common
 
 			try
 			{
-				debuggableCore.GetCpuFlagsAndRegisters();
+				var dummy = debuggableCore.GetCpuFlagsAndRegisters();
 			}
 			catch (NotImplementedException)
 			{

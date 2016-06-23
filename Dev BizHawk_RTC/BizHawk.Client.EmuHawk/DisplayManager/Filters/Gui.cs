@@ -73,7 +73,6 @@ namespace BizHawk.Client.EmuHawk.Filters
 			{
 				//just totally different code
 				//apply the zooming algorithm (pasted and reworked, for now)
-				//ALERT COPYPASTE LAUNDROMAT
 
 				Vector2 VS = new Vector2(virtualWidth, virtualHeight);
 				Vector2 BS = new Vector2(textureWidth, textureHeight);
@@ -134,11 +133,8 @@ namespace BizHawk.Client.EmuHawk.Filters
 					PS = trials[bestIndex];
 				}
 
-				//"fix problems with gameextrapadding in >1x window scales" (other edits were made, maybe theyre whats important)
-				//vw = (int)(PS.X * oldSourceWidth);
-				//vh = (int)(PS.Y * oldSourceHeight);
-				vw = (int)(PS.X * sourceWidth);
-				vh = (int)(PS.Y * sourceHeight);
+				vw = (int)(PS.X * oldSourceWidth);
+				vh = (int)(PS.Y * oldSourceHeight);
 				widthScale = PS.X;
 				heightScale = PS.Y;
 			}
@@ -147,14 +143,6 @@ namespace BizHawk.Client.EmuHawk.Filters
 				vw = (int)(widthScale * sourceWidth);
 				vh = (int)(heightScale * sourceHeight);
 			}
-
-			//theres only one sensible way to letterbox in case we're shrinking a dimension: "pan & scan" to the center
-			//this is unlikely to be what the user wants except in the one case of maybe shrinking off some overscan area
-			//instead, since we're more about biz than gaming, lets shrink the view to fit in the small dimension
-			if (targetWidth < vw)
-				vw = targetWidth;
-			if (targetHeight < vh)
-				vh = targetHeight;
 
 			//determine letterboxing parameters
 			vx = (targetWidth - vw) / 2;
@@ -189,7 +177,6 @@ namespace BizHawk.Client.EmuHawk.Filters
 		Size OutputSize, InputSize;
 		public Size TextureSize, VirtualTextureSize;
 		public int BackgroundColor;
-		public bool AutoPrescale;
 		public IGuiRenderer GuiRenderer;
 		public bool Flip;
 		public IGL GL;
@@ -287,9 +274,6 @@ namespace BizHawk.Client.EmuHawk.Filters
 				LL.vy += Padding.Top;
 			}
 			ContentSize = new Size(LL.vw,LL.vh);
-
-			if (InputSize == OutputSize) //any reason we need to check vx and vy?
-				IsNOP = true;
 		}
 
 		public Size GetContentSize() { return ContentSize; }
@@ -326,7 +310,7 @@ namespace BizHawk.Client.EmuHawk.Filters
 
 			GuiRenderer.Begin(OutputSize.Width, OutputSize.Height);
 			GuiRenderer.SetBlendState(GL.BlendNoneCopy);
-
+			
 			if(FilterOption != eFilterOption.None)
 				InputTexture.SetFilterLinear();
 			else
@@ -334,8 +318,8 @@ namespace BizHawk.Client.EmuHawk.Filters
 
 			if (FilterOption == eFilterOption.Bicubic)
 			{
-				//this was handled earlier by another filter
 			}
+
 
 			GuiRenderer.Modelview.Translate(LL.vx, LL.vy);
 			if (Flip)
@@ -377,61 +361,6 @@ namespace BizHawk.Client.EmuHawk.Filters
 			FilterProgram.GuiRenderer.Draw(InputTexture);
 			FilterProgram.GuiRenderer.End();
 		}
-	}
-
-	public class AutoPrescaleFilter : BaseFilter
-	{
-		Size OutputSize, InputSize;
-		int XIS, YIS;
-
-		public override void Initialize()
-		{
-			DeclareInput(SurfaceDisposition.Texture);
-		}
-
-		public override void SetInputFormat(string channel, SurfaceState state)
-		{
-			//calculate integer scaling factors
-			XIS = OutputSize.Width / state.SurfaceFormat.Size.Width;
-			YIS = OutputSize.Height / state.SurfaceFormat.Size.Height;
-
-			OutputSize = state.SurfaceFormat.Size;
-
-			if (XIS <= 1 && YIS <= 1)
-			{
-				IsNOP = true;
-			}
-			else
-			{
-				OutputSize.Width *= XIS;
-				OutputSize.Height *= YIS;
-			}
-
-			var outState = new SurfaceState();
-			outState.SurfaceFormat = new SurfaceFormat(OutputSize);
-			outState.SurfaceDisposition = SurfaceDisposition.RenderTarget;
-			DeclareOutput(outState);
-		}
-
-		public override Size PresizeOutput(string channel, Size size)
-		{
-			OutputSize = size;
-			return base.PresizeOutput(channel, size);
-		}
-
-		public override Size PresizeInput(string channel, Size insize)
-		{
-			InputSize = insize;
-			return insize;
-		}
-		public override void Run()
-		{
-			FilterProgram.GuiRenderer.Begin(OutputSize); //hope this didnt change
-			FilterProgram.GuiRenderer.SetBlendState(FilterProgram.GL.BlendNoneCopy);
-			FilterProgram.GuiRenderer.Modelview.Scale(XIS,YIS);
-			FilterProgram.GuiRenderer.Draw(InputTexture);
-			FilterProgram.GuiRenderer.End();
-	  }
 	}
 
 	public class LuaLayer : BaseFilter

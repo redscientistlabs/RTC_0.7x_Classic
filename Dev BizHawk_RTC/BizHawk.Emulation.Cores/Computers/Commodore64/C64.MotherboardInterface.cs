@@ -10,6 +10,7 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64
 	    private int _lastReadVicAddress = 0x3FFF;
 	    private int _lastReadVicData = 0xFF;
 	    private int _vicBank = 0xC000;
+	    private int _tempCia1Cra;
 
 	    private bool CassPort_ReadDataOutput()
 		{
@@ -88,16 +89,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64
             return !_restorePressed && Cia1.ReadIrq() && CartPort.ReadNmi();
         }
 
-        private bool[] Input_ReadJoysticks()
-        {
-            return _joystickPressed;
-        }
-
-        private bool[] Input_ReadKeyboard()
-	    {
-	        return _keyboardPressed;
-	    }
-
         private bool Pla_ReadCharen()
 		{
 			return (Cpu.PortData & 0x04) != 0;
@@ -172,10 +163,5 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64
 			_lastReadVicData = Pla.VicRead(_lastReadVicAddress);
             return _lastReadVicData;
 		}
-
-	    private int ReadOpenBus()
-	    {
-	        return _lastReadVicData;
-	    }
 	}
 }

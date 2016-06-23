@@ -857,9 +857,6 @@ namespace BizHawk.Client.EmuHawk
 		{
 			return "avi";
 		}
-
-		public bool UsesAudio { get { return parameters.has_audio; } }
-		public bool UsesVideo { get { return true; } }
 	}
 }
 

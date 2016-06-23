@@ -74,11 +74,6 @@ namespace BizHawk.Client.EmuHawk.FilterManager
 		public IRenderTargetProvider RenderTargetProvider;
 		public RenderTarget GetRenderTarget(string channel = "default") { return CurrRenderTarget; }
 		public RenderTarget CurrRenderTarget;
-
-		public RenderTarget GetTempTarget(int width, int height)
-		{
-			return RenderTargetProvider.Get(new Size(width, height));
-		}
 				
 		public void AddFilter(BaseFilter filter, string name = "")
 		{
@@ -188,11 +183,6 @@ namespace BizHawk.Client.EmuHawk.FilterManager
 				{
 					iosi.SurfaceFormat = currState.SurfaceFormat;
 					f.SetInputFormat(channel, currState);
-
-					if (f.IsNOP)
-					{
-						continue;
-					}
 
 					//check if the desired disposition needs to change from texture to render target
 					//(if so, insert a render filter)

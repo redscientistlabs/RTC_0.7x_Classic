@@ -49,7 +49,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\output\dll\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;VS2010</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -58,48 +58,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\output64\dll\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisLogFile>..\output\dll\BizHawk.Emulation.Cores.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>..\output64\dll\</OutputPath>
-    <DefineConstants>TRACE;VS2010</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\BizHawk.Emulation.Cores.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ELFSharp">
-      <HintPath>..\References\ELFSharp.dll</HintPath>
-    </Reference>
     <Reference Include="EMU7800">
       <HintPath>..\References\EMU7800.dll</HintPath>
     </Reference>
@@ -208,25 +167,20 @@
     </Compile>
     <Compile Include="Computers\Commodore64\C64.Motherboard.cs" />
     <Compile Include="Computers\Commodore64\C64.MotherboardInterface.cs" />
-    <Compile Include="Computers\Commodore64\C64Format.cs" />
     <Compile Include="Computers\Commodore64\C64Util.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0000.cs" />
     <Compile Include="Computers\Commodore64\C64.Input.cs" />
-    <Compile Include="Computers\Commodore64\Cartridge\Mapper0001.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0005.cs" />
-    <Compile Include="Computers\Commodore64\Cartridge\Mapper000A.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper000B.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper000F.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0011.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0012.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0013.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\Mapper0020.cs" />
-    <Compile Include="Computers\Commodore64\Cartridge\Mapper002B.cs" />
     <Compile Include="Computers\Commodore64\Cassette\CassettePortDevice.cs" />
     <Compile Include="Computers\Commodore64\Cassette\TapeDrive.cs" />
-    <Compile Include="Computers\Commodore64\C64FormatFinder.cs" />
-    <Compile Include="Computers\Commodore64\Media\DiskBuilder.cs" />
     <Compile Include="Computers\Commodore64\Media\Tape.cs" />
+    <Compile Include="Computers\Commodore64\InputFileInfo.cs" />
     <Compile Include="Computers\Commodore64\Media\PRG.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\CartridgeDevice.cs" />
     <Compile Include="Computers\Commodore64\Cartridge\CartridgePort.cs" />
@@ -236,7 +190,6 @@
     <Compile Include="Computers\Commodore64\MOS\Chip4864.cs" />
     <Compile Include="Computers\Commodore64\MOS\Chip6510.IDebuggable.cs" />
     <Compile Include="Computers\Commodore64\MOS\Chip6510.IDisassemblable.cs" />
-    <Compile Include="Computers\Commodore64\MOS\Chip6522.cs" />
     <Compile Include="Computers\Commodore64\MOS\Chip6581R3.cs" />
     <Compile Include="Computers\Commodore64\MOS\Chip6581R4AR.cs" />
     <Compile Include="Computers\Commodore64\MOS\Chip8580R5.cs" />
@@ -269,7 +222,6 @@
     <Compile Include="Computers\Commodore64\Serial\Drive1541.IDebuggable.cs" />
     <Compile Include="Computers\Commodore64\Serial\Drive1541.IDisassemblable.cs" />
     <Compile Include="Computers\Commodore64\Serial\Drive1541.Motor.cs" />
-    <Compile Include="Computers\Commodore64\Serial\Drive1541.Registers.cs" />
     <Compile Include="Computers\Commodore64\Serial\SerialPort.cs" />
     <Compile Include="Computers\Commodore64\Serial\SerialPortDevice.cs" />
     <Compile Include="Computers\Commodore64\User\UserPort.cs" />
@@ -726,7 +678,6 @@
     <Compile Include="Consoles\Nintendo\NES\Boards\UNIF\UNIF_UNL-AX5705.cs" />
     <Compile Include="Consoles\Nintendo\NES\Boards\UNIF\UNIF_UNL-CC-21.cs" />
     <Compile Include="Consoles\Nintendo\NES\Boards\UNIF\UNIF_UNL-EDU2000.cs" />
-    <Compile Include="Consoles\Nintendo\NES\Boards\UNIF\UNIF_UNL_DripGame.cs" />
     <Compile Include="Consoles\Nintendo\NES\Boards\UxROM.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -978,7 +929,6 @@
     <Compile Include="CPUs\Z80\Registers.cs" />
     <Compile Include="CPUs\Z80\Tables.cs" />
     <Compile Include="CPUs\Z80\Z80A.cs" />
-    <Compile Include="ElfRunner.cs" />
     <Compile Include="FileID.cs" />
     <Compile Include="Consoles\PC Engine\MemoryMap.cs" />
     <Compile Include="Consoles\PC Engine\MemoryMap.SF2.cs" />
@@ -991,7 +941,6 @@
     <Compile Include="Libretro\LibRetro.cs" />
     <Compile Include="Libretro\LibRetroEmulator.cs" />
     <Compile Include="Libretro\LibRetroEmulator.InputCallbacks.cs" />
-    <Compile Include="MemoryBlock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Consoles\Sega\Genesis\Genesis.cs" />
     <Compile Include="Consoles\Sega\Genesis\GenVDP.cs" />
@@ -1001,14 +950,6 @@
     <Compile Include="Consoles\Sega\Genesis\MemoryMap.Z80.cs" />
     <Compile Include="Consoles\Sega\SMS\SMS.cs" />
     <Compile Include="Consoles\Sega\SMS\VDP.cs" />
-    <Compile Include="Sound\CDAudio.cs" />
-    <Compile Include="Sound\HuC6280PSG.cs" />
-    <Compile Include="Sound\MMC5Audio.cs" />
-    <Compile Include="Sound\SN76489.cs" />
-    <Compile Include="Sound\Sunsoft5BAudio.cs" />
-    <Compile Include="Sound\VRC6Alt.cs" />
-    <Compile Include="Sound\YM2413.cs" />
-    <Compile Include="Sound\YM2612.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Consoles\Coleco\docs\CV-Sound.txt" />

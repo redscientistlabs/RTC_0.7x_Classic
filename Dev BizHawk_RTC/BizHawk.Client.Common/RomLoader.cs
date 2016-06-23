@@ -543,14 +543,6 @@ namespace BizHawk.Client.Common
 										roms,
 										(AppleII.Settings)GetCoreSettings<AppleII>());
 									break;
-								case "C64":
-									nextEmulator = new C64(
-										nextComm,
-                                        xmlGame.Assets.Select(a => a.Value),
-										(C64.C64Settings)GetCoreSettings<C64>(),
-										(C64.C64SyncSettings)GetCoreSyncSettings<C64>()
-									);
-									break;
 								case "PSX":
 									var entries = xmlGame.AssetFullPaths;
 									var discs = new List<Disc>();
@@ -784,7 +776,7 @@ namespace BizHawk.Client.Common
 								nextEmulator = new Atari7800(nextComm, game, rom.RomData, gamedbpath);
 								break;
 							case "C64":
-								var c64 = new C64(nextComm, Enumerable.Repeat(rom.RomData, 1), GetCoreSettings<C64>(), GetCoreSyncSettings<C64>());
+								var c64 = new C64(nextComm, game, rom.RomData, rom.Extension, GetCoreSettings<C64>(), GetCoreSyncSettings<C64>());
 								nextEmulator = c64;
 								break;
 							case "GBA":

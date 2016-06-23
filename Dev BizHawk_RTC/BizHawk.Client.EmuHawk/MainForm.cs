@@ -66,11 +66,13 @@ namespace BizHawk.Client.EmuHawk
 			HandleToggleLightAndLink();
 			SetStatusBar();
 
-            //RTC_HIJACK : Hook at Mainform MainForm_load()
-            RTC.RTC_Hooks.MAINFORM_FORM_LOAD_END();
+			//RTC_HIJACK : Hook at Mainform MainForm_load()
+			RTC.RTC_Hooks.MAINFORM_FORM_LOAD_END();
 
-            //AUTO-UPDATE DISABLED BECAUSE OF HACK
-            /*
+
+			//RTC_HIJACK : Disable auto-update of bizhawk
+			/*
+
 			// New version notification
 			UpdateChecker.CheckComplete += (s2, e2) =>
 			{
@@ -78,8 +80,8 @@ namespace BizHawk.Client.EmuHawk
 				this.BeginInvoke(() => { UpdateNotification.Visible = UpdateChecker.IsNewVersionAvailable; });
 			};
 			UpdateChecker.BeginCheck(); // Won't actually check unless enabled by user
-            */
-        }
+			*/
+		}
 
 		static MainForm()
 		{
@@ -225,7 +227,6 @@ namespace BizHawk.Client.EmuHawk
 			//TODO GL - a lot of disorganized wiring-up here
 			CGC.CGCBinPath = Path.Combine(PathManager.GetDllDirectory(), "cgc.exe");
 			PresentationPanel = new PresentationPanel();
-			PresentationPanel.GraphicsControl.MainWindow = true;
 			GlobalWin.DisplayManager = new DisplayManager(PresentationPanel);
 			Controls.Add(PresentationPanel);
 			Controls.SetChildIndex(PresentationPanel, 0);
@@ -245,9 +246,7 @@ namespace BizHawk.Client.EmuHawk
 					//zero 03-nov-2015 - close game after other steps. tools might need to unhook themselves from a core.
 					Global.MovieSession.Movie.Stop();
 					GlobalWin.Tools.Close();
-
 					CloseGame();
-
 					//does this need to be last for any particular reason? do tool dialogs persist settings when closing?
 					SaveConfig();
 				}
@@ -469,13 +468,14 @@ namespace BizHawk.Client.EmuHawk
 				GlobalWin.DisplayManager.NeedsToPaint = true;
 			};
 
-            //RTC_HIJACK : Hook at Mainform Constructor
-            RTC.RTC_Hooks.MAINFORM_CREATE(args);
-            //----------------
 
-        }
+			//RTC_HIJACK : Hook at Mainform Constructor
+			RTC.RTC_Hooks.MAINFORM_CREATE(args);
+			//----------------
 
-        private bool _supressSyncSettingsWarning = false;
+		}
+
+		private bool _supressSyncSettingsWarning = false;
 
 		public int ProgramRunLoop()
 		{
@@ -721,13 +721,13 @@ namespace BizHawk.Client.EmuHawk
 				ActiveForm is TAStudio ||
 				ActiveForm is VirtualpadTool ||
 
-                    //RTC_Hijack : Adding RTC Windows for Background input
-                    ActiveForm is RTC.RTC_Form ||
-                    ActiveForm is RTC.RTC_GH_Form ||
-                    ActiveForm is RTC.RTC_TF_Form ||
-                    ActiveForm is RTC.RTC_BE_Form
+					//RTC_Hijack : Adding RTC Windows for Background input
+					ActiveForm is RTC.RTC_Form ||
+					ActiveForm is RTC.RTC_GH_Form ||
+					ActiveForm is RTC.RTC_TF_Form ||
+					ActiveForm is RTC.RTC_BE_Form
                     )//--------------------------------------
-            {
+			{
 				return true;
 			}
 
@@ -987,7 +987,7 @@ namespace BizHawk.Client.EmuHawk
 			using (var fs = new FileStream(path + "_test.bmp", FileMode.OpenOrCreate, FileAccess.Write))
 				QuickBmpFile.Save(Global.Emulator.VideoProvider(), fs, r.Next(50, 500), r.Next(50, 500));
 			*/
-            GlobalWin.OSD.AddMessage(fi.Name + " saved.");
+			GlobalWin.OSD.AddMessage(fi.Name + " saved.");
 		}
 		//static Random r = new Random();
 
@@ -1016,13 +1016,13 @@ namespace BizHawk.Client.EmuHawk
 				}
 				Console.WriteLine("Selecting display size " + lastComputedSize.ToString());
 
-                // Change size
+				// Change size
 
-                //RTC_HIJACK : Don't change the MainForm Size
-                //Size = new Size((lastComputedSize.Width) + borderWidth, ((lastComputedSize.Height) + borderHeight));
-                //---------------------------
+				//RTC_HIJACK : Don't change the MainForm Size
+				//Size = new Size((lastComputedSize.Width) + borderWidth, ((lastComputedSize.Height) + borderHeight));
+				//---------------------------
 
-                PerformLayout();
+				PerformLayout();
 				PresentationPanel.Resized = true;
 
 				// Is window off the screen at this size?
@@ -1091,16 +1091,13 @@ namespace BizHawk.Client.EmuHawk
 				//(this could be determined with more work; other side affects of the fullscreen mode include: corrupted taskbar, no modal boxes on top of GL control, no screenshots)
 				//At any rate, we can solve this by adding a 1px black border around the GL control
 				//Please note: It is important to do this before resizing things, otherwise momentarily a GL control without WS_BORDER will be at the magic dimensions and cause the flakeout
-				if (Global.Config.DispFullscreenHacks && Global.Config.DispMethod == Config.EDispMethod.OpenGL)
+				if (Global.Config.DispFullscreenHacks)
 				{
 					//ATTENTION: this causes the statusbar to not work well, since the backcolor is now set to black instead of SystemColors.Control.
 					//It seems that some statusbar elements composite with the backcolor. 
 					//Maybe we could add another control under the statusbar. with a different backcolor
 					Padding = new Padding(1);
 					BackColor = Color.Black;
-
-					//FUTURE WORK:
-					//re-add this padding back into the display manager (so the image will get cut off a little but, but a few more resolutions will fully fit into the screen)
 				}
 #endif
 
@@ -1424,12 +1421,14 @@ namespace BizHawk.Client.EmuHawk
 
 		private void SetWindowText()
 		{
-            //RTC_HIJACK : Don't change the MainForm Title
-            if (Convert.ToBoolean(1)) // weird hack to make the precompiler shut the fuck up about unreachable code
-                return; //Don't change MainForm Title
-            //----------------------------
 
-            string str = string.Empty;
+			//RTC_HIJACK : Don't change the MainForm Title
+			if (Convert.ToBoolean(1)) // weird hack to make the precompiler shut the fuck up about unreachable code
+				return; //Don't change MainForm Title
+			//----------------------------
+
+
+			string str = string.Empty;
 
 			if (_inResizeLoop)
 			{
@@ -1870,7 +1869,6 @@ namespace BizHawk.Client.EmuHawk
 			_throttle.SetCoreFps(Global.Emulator.CoreComm.VsyncRate);
 			_throttle.signal_paused = EmulatorPaused;
 			_throttle.signal_unthrottle = _unthrottled || turbo;
-			//zero 26-mar-2016 - vsync and vsync throttle here both is odd, but see comments elsewhere about triple buffering
 			_throttle.signal_overrideSecondaryThrottle = (fastForward || rewind) && (Global.Config.SoundThrottle || Global.Config.VSyncThrottle || Global.Config.VSync);
 			_throttle.SetSpeedPercent(speedPercent);
 		}
@@ -1928,8 +1926,8 @@ namespace BizHawk.Client.EmuHawk
 			}
 		}
 
-        //RTC_HIJACK : make MakeScreenshotImage() method public
-        public static BitmapBuffer MakeScreenshotImage()
+		//RTC_HIJACK : make MakeScreenshotImage() method public
+		public static BitmapBuffer MakeScreenshotImage()
 		{
 			return GlobalWin.DisplayManager.RenderVideoProvider(Global.Emulator.VideoProvider());
 		}
@@ -2067,11 +2065,11 @@ namespace BizHawk.Client.EmuHawk
 				FilterIndex = _lastOpenRomFilter
 			};
 
-            //RTC_HIJACK : Fixing Bizhawk's LastRomPath
-            ofd.InitialDirectory = Global.Config.LastRomPath;
-            //-----------------------
+			//RTC_HIJACK : Fixing Bizhawk's LastRomPath
+			ofd.InitialDirectory = Global.Config.LastRomPath;
+			//-----------------------
 
-            var result = ofd.ShowHawkDialog();
+			var result = ofd.ShowHawkDialog();
 			if (result != DialogResult.OK)
 			{
 				return;
@@ -2215,7 +2213,7 @@ namespace BizHawk.Client.EmuHawk
 				Global.Config.SoundVolume = 100;
 			}
 
-			//GlobalWin.Sound.ApplyVolumeSettings();
+			GlobalWin.Sound.ApplyVolumeSettings();
 			GlobalWin.OSD.AddMessage("Volume " + Global.Config.SoundVolume);
 		}
 
@@ -2227,7 +2225,7 @@ namespace BizHawk.Client.EmuHawk
 				Global.Config.SoundVolume = 0;
 			}
 
-			//GlobalWin.Sound.ApplyVolumeSettings();
+			GlobalWin.Sound.ApplyVolumeSettings();
 			GlobalWin.OSD.AddMessage("Volume " + Global.Config.SoundVolume);
 		}
 
@@ -2542,14 +2540,14 @@ namespace BizHawk.Client.EmuHawk
 					}
 				}
 
-				if (Global.Emulator.UsesLinkCable())
+				if (Global.Emulator.CoreComm.UsesLinkCable)
 				{
 					if (!LinkConnectStatusBarButton.Visible)
 					{
 						LinkConnectStatusBarButton.Visible = true;
 					}
 
-					LinkConnectStatusBarButton.Image = Global.Emulator.AsLinkable().LinkConnected
+					LinkConnectStatusBarButton.Image = Global.Emulator.CoreComm.LinkConnected
 						? LinkCableOn
 						: LinkCableOff;
 				}
@@ -2605,7 +2603,7 @@ namespace BizHawk.Client.EmuHawk
 		private static void VsyncMessage()
 		{
 			GlobalWin.OSD.AddMessage(
-				"Display Vsync set to " + (Global.Config.VSync ? "on" : "off")
+				"Display Vsync set to " + (Global.Config.VSyncThrottle ? "on" : "off")
 			);
 		}
 
@@ -2765,10 +2763,7 @@ namespace BizHawk.Client.EmuHawk
 				runFrame = true;
 			}
 
-			float atten = Global.Config.SoundVolume / 100.0f;
-			if (!Global.Config.SoundEnabledNormal)
-				atten = 0;
-
+			var genSound = false;
 			var coreskipaudio = false;
 			if (runFrame || force)
 			{
@@ -2843,18 +2838,11 @@ namespace BizHawk.Client.EmuHawk
 
 				if (!_runloopFrameadvance)
 				{
-					
+					genSound = true;
 				}
 				else if (!Global.Config.MuteFrameAdvance)
 				{
-					atten = 0;
-				}
-
-				if (isFastForwarding || IsTurboing || isRewinding)
-				{
-					atten *= Global.Config.SoundVolumeRWFF / 100.0f;
-					if (!Global.Config.SoundEnabledRWFF)
-						atten = 0;
+					genSound = true;
 				}
 
 				Global.MovieSession.HandleMovieOnFrameLoop();
@@ -2866,10 +2854,8 @@ namespace BizHawk.Client.EmuHawk
 					coreskipaudio = true;
 
 				{
-					bool render = !_throttle.skipnextframe;
+					bool render = !_throttle.skipnextframe || _currAviWriter != null;
 					bool renderSound = !coreskipaudio;
-					if (_currAviWriter != null && _currAviWriter.UsesVideo) render = true;
-					if (_currAviWriter != null && _currAviWriter.UsesAudio) renderSound = true;
 					Global.Emulator.FrameAdvance(render, renderSound);
 				}
 
@@ -2927,24 +2913,25 @@ namespace BizHawk.Client.EmuHawk
 				UpdateFrame = false;
 			}
 
-			GlobalWin.Sound.UpdateSound(atten);
+			bool outputSilence = !genSound || coreskipaudio;
+			GlobalWin.Sound.UpdateSound(outputSilence);
 
-            //RTC_HIJACK : Hooking at the end of the Core Step
-            RTC.RTC_Hooks.CPU_STEP(Global.ClientControls["Rewind"], Global.ClientControls["Fast Forward"], EmulatorPaused);
-            //---------------------------------------
+			//RTC_HIJACK : Hooking at the end of the Core Step
+			RTC.RTC_Hooks.CPU_STEP(Global.ClientControls["Rewind"], Global.ClientControls["Fast Forward"], EmulatorPaused);
+			//---------------------------------------
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region AVI Stuff
+		#region AVI Stuff
 
-        /// <summary>
-        /// start avi recording, unattended
-        /// </summary>
-        /// <param name="videowritername">match the short name of an ivideowriter</param>
-        /// <param name="filename">filename to save to</param>
-        private void RecordAv(string videowritername, string filename)
+		/// <summary>
+		/// start avi recording, unattended
+		/// </summary>
+		/// <param name="videowritername">match the short name of an ivideowriter</param>
+		/// <param name="filename">filename to save to</param>
+		private void RecordAv(string videowritername, string filename)
 		{
 			_RecordAv(videowritername, filename, true);
 		}
@@ -2957,13 +2944,13 @@ namespace BizHawk.Client.EmuHawk
 			_RecordAv(null, null, false);
 		}
 
-        /// <summary>
-        /// start AV recording
-        /// </summary>
+		/// <summary>
+		/// start AV recording
+		/// </summary>
 
-        //RTC_HIJACK : make _RecordAv() method public
-        public void _RecordAv(string videowritername, string filename, bool unattended)
-        {
+		//RTC_HIJACK : make _RecordAv() method public
+		public void _RecordAv(string videowritername, string filename, bool unattended)
+		{
 			if (_currAviWriter != null)
 			{
 				return;
@@ -3140,10 +3127,9 @@ namespace BizHawk.Client.EmuHawk
 			RewireSound();
 		}
 
-
-        //RTC_HIJACK : make StopAv() method public
-        public void StopAv()
-        {
+		//RTC_HIJACK : make StopAv() method public
+		public void StopAv()
+		{
 			if (_currAviWriter == null)
 			{
 				_dumpProxy = null;
@@ -3362,12 +3348,12 @@ namespace BizHawk.Client.EmuHawk
 		public bool LoadRom(string path, LoadRomArgs args)
 		{
 
-            //RTC_HIJACK : Hook at beginning of LoadRom
-            RTC.RTC_Hooks.LOAD_GAME_BEGIN();
-            //----------
+			//RTC_HIJACK : Hook at beginning of LoadRom
+			RTC.RTC_Hooks.LOAD_GAME_BEGIN();
+			//----------
 
-            //default args
-            if (args == null) args = new LoadRomArgs();
+			//default args
+			if (args == null) args = new LoadRomArgs();
 
 			//if this is the first call to LoadRom (they will come in recursively) then stash the args
 			bool firstCall = false;
@@ -3415,7 +3401,7 @@ namespace BizHawk.Client.EmuHawk
 				// the new settings objects
 				CommitCoreSettingsToConfig(); // adelikat: I Think by reordering things, this isn't necessary anymore
 
-                //RTC_HIJACK : Don't close the game
+				//RTC_HIJACK : Don't close the game
 				//CloseGame();
 
 				var nextComm = CreateCoreComm();
@@ -3506,14 +3492,12 @@ namespace BizHawk.Client.EmuHawk
 						GlobalWin.Tools.Restart<LuaConsole>();
 					}
 
-
-                    //RTC_Hijack ignoring default.nes for Recent Menu
-                    if (!loader.CanonicalFullPath.Contains("default.nes"))
-                    {
-                        Global.Config.RecentRoms.Add(loaderName);
-                        JumpLists.AddRecentItem(loaderName, ioa.DisplayName);
-                    }
-
+					//RTC_Hijack ignoring default.nes for Recent Menu
+					if (!loader.CanonicalFullPath.Contains("default.nes"))
+					{
+						Global.Config.RecentRoms.Add(loaderName);
+						JumpLists.AddRecentItem(loaderName, ioa.DisplayName);
+					}
 
 					// Don't load Save Ram if a movie is being loaded
 					if (!Global.MovieSession.MovieIsQueued && File.Exists(PathManager.SaveRamPath(loader.Game)))
@@ -3563,11 +3547,10 @@ namespace BizHawk.Client.EmuHawk
 						}
 					}
 
-                    //RTC_HIJACK : Hook at the end of LoadRom
-                    RTC.RTC_Hooks.LOAD_GAME_DONE();
-                    //----------
+					//RTC_HIJACK : Hook at the end of LoadRom
+					RTC.RTC_Hooks.LOAD_GAME_DONE();
+					//----------
 
-                    ApiHawk.ClientApi.OnRomLoaded();
 					return true;
 				}
 				else
@@ -3578,7 +3561,6 @@ namespace BizHawk.Client.EmuHawk
 					//The ROM has been loaded by a recursive invocation of the LoadROM method.
 					if (!(Global.Emulator is NullEmulator))
 					{
-						ApiHawk.ClientApi.OnRomLoaded();
 						return true;
 					}
 
@@ -3590,12 +3572,11 @@ namespace BizHawk.Client.EmuHawk
 					SetMainformMovieInfo();
 					SetWindowText();
 
+					//RTC_HIJACK : Hook at LoadRom failure
+					RTC.RTC_Hooks.LOAD_GAME_FAILED();
+					//----------
 
-                    //RTC_HIJACK : Hook at LoadRom failure
-                    RTC.RTC_Hooks.LOAD_GAME_FAILED();
-                    //----------
-
-                    return false;
+					return false;
 				}
 			}
 			finally
@@ -3631,15 +3612,15 @@ namespace BizHawk.Client.EmuHawk
 		// its very tricky. rename to be more clear or combine them.
 		// This gets called whenever a core related thing is changed.
 		// Like reboot core.
-		private void CloseGame(bool clearSram = false, bool DontLoadDefault = false)
+		private void CloseGame(bool clearSram = false)
 		{
-            //RTC_HIJACK : Hook before CloseGame
-                RTC.RTC_Hooks.CLOSE_GAME();
-                if (Convert.ToBoolean(1)) //stupid call to bypass compilation warning
-                    return;
-            //-----------
+			//RTC_HIJACK : Hook before CloseGame
+			RTC.RTC_Hooks.CLOSE_GAME();
+			if (Convert.ToBoolean(1)) //stupid call to bypass compilation warning
+				return;
+			//-----------
 
-            GameIsClosing = true;
+			GameIsClosing = true;
 			if (clearSram)
 			{
 				var path = PathManager.SaveRamPath(Global.Game);
@@ -3672,7 +3653,6 @@ namespace BizHawk.Client.EmuHawk
 			RewireSound();
 			RebootStatusBarIcon.Visible = false;
 			GameIsClosing = false;
-
 		}
 
 		public bool GameIsClosing { get; set; } // Lets tools make better decisions when being called by CloseGame
@@ -3693,11 +3673,11 @@ namespace BizHawk.Client.EmuHawk
 				RewireSound();
 				Global.Rewinder.ResetRewindBuffer();
 
-                //RTC_HIJACK : Don't change the Title
-                //Text = "BizHawk" + (VersionInfo.DeveloperBuild ? " (interim) " : string.Empty);
-                //-------------------------
+				//RTC_HIJACK : Don't change the Title
+				//Text = "BizHawk" + (VersionInfo.DeveloperBuild ? " (interim) " : string.Empty);
+				//-------------------------
 
-                HandlePlatformMenus();
+				HandlePlatformMenus();
 				_stateSlots.Clear();
 				UpdateDumpIcon();
 				UpdateCoreStatusBarButton();
@@ -3773,18 +3753,18 @@ namespace BizHawk.Client.EmuHawk
 				return;
 			}
 
-            if (IsSlave && master.WantsToControlSavestates)
+			if (IsSlave && master.WantsToControlSavestates)
 			{
 				master.LoadState();
 				return;
 			}
 
-            //RTC_HIJACK Hook at beginning of Load Savestate
-            RTC.RTC_Hooks.LOAD_SAVESTATE_BEGIN();
-            //-----------
+			//RTC_HIJACK Hook at beginning of Load Savestate
+			RTC.RTC_Hooks.LOAD_SAVESTATE_BEGIN();
+			//-----------
 
-            // If from lua, disable counting rerecords
-            bool wasCountingRerecords = Global.MovieSession.Movie.IsCountingRerecords;
+			// If from lua, disable counting rerecords
+			bool wasCountingRerecords = Global.MovieSession.Movie.IsCountingRerecords;
 
 			if (fromLua)
 				Global.MovieSession.Movie.IsCountingRerecords = false;
@@ -3817,13 +3797,13 @@ namespace BizHawk.Client.EmuHawk
 
 			Global.MovieSession.Movie.IsCountingRerecords = wasCountingRerecords;
 
-            //RTC_HIJACK : Hook at the end of Load SaveState
-            RTC.RTC_Hooks.LOAD_SAVESTATE_END();
-            //-----------
+			//RTC_HIJACK : Hook at the end of Load SaveState
+			RTC.RTC_Hooks.LOAD_SAVESTATE_END();
+			//-----------
 
-        }
+		}
 
-        public void LoadQuickSave(string quickSlotName, bool fromLua = false, bool supressOSD = false)
+		public void LoadQuickSave(string quickSlotName, bool fromLua = false, bool supressOSD = false)
 		{
 			if (!Global.Emulator.HasSavestates())
 			{
@@ -4154,6 +4134,22 @@ namespace BizHawk.Client.EmuHawk
 
 		#endregion
 
+		private void LinkConnectStatusBarButton_Click(object sender, EventArgs e)
+		{
+			// TODO: it would be cool if clicking this toggled the state
+			if (Global.Emulator.CoreComm.LinkConnected == true)
+			{
+				//Disconnect
+				//This Value:  cablediscosignal_new  Changes to False, The Core will disconnect
+
+			}
+			else if (Global.Emulator.CoreComm.LinkConnected == false)
+			{
+				//Reconnect
+
+			}
+		}
+
 		private void FeaturesMenuItem_Click(object sender, EventArgs e)
 		{
 			GlobalWin.Tools.Load<CoreFeatureAnalysis>();
@@ -4191,25 +4187,24 @@ namespace BizHawk.Client.EmuHawk
 		}
 
 
-        private void MainForm_ResizeEnd(object sender, EventArgs e)
-        {
-            //RTC_HIJACK : MainForm_ResizeEnd
+		private void MainForm_ResizeEnd(object sender, EventArgs e)
+		{
+			//RTC_HIJACK : MainForm_ResizeEnd
 
-            //This event function might not exist if the bizhawk gets updated.
-            //Just do recreate the ResizeEnd Event and bind the hook to it.
-            RTC.RTC_Hooks.MAINFORM_RESIZEEND();
-            //------------
-        }
+			//This event function might not exist if the bizhawk gets updated.
+			//Just do recreate the ResizeEnd Event and bind the hook to it.
+			RTC.RTC_Hooks.MAINFORM_RESIZEEND();
+			//------------
+		}
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //RTC_HIJACK : MainForm_FormClosing
-            //You might have
-            RTC.RTC_Hooks.MAINFORM_CLOSING();
-            //---------------------
-        }
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			//RTC_HIJACK : MainForm_FormClosing
+			//You might have
+			RTC.RTC_Hooks.MAINFORM_CLOSING();
+			//---------------------
+		}
 
 
-
-    }
+	}
 }

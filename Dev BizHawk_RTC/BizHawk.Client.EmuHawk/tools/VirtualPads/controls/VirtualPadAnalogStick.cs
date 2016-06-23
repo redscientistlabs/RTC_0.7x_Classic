@@ -191,8 +191,6 @@ namespace BizHawk.Client.EmuHawk
 
 		private void SetNumericsFromAnalog()
 		{
-			_programmaticallyUpdatingNumerics = true;
-
 			if (AnalogStick.HasValue)
 			{
 				// Setting .Value of a numeric causes a draw, so avoid it unless necessary
@@ -227,8 +225,6 @@ namespace BizHawk.Client.EmuHawk
 
 			manualR.ValueChanged += polarNumericChangedEventHandler;
 			manualTheta.ValueChanged += polarNumericChangedEventHandler;
-
-			_programmaticallyUpdatingNumerics = false;
 		}
 
 		private void AnalogStick_MouseDown(object sender, MouseEventArgs e)

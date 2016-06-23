@@ -686,8 +686,6 @@ namespace BizHawk.Client.EmuHawk
 				case DisplayType.Float:
 					if (Text.IsFloat())
 					{
-						if (Text == "-")
-							return 0;
 						float val = float.Parse(Text);
 						var bytes = BitConverter.GetBytes(val);
 						return BitConverter.ToInt32(bytes, 0);

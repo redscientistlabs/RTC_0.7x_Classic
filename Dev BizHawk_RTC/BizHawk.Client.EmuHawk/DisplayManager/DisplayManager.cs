@@ -26,7 +26,7 @@ namespace BizHawk.Client.EmuHawk
 	{
 		class DisplayManagerRenderTargetProvider : IRenderTargetProvider
 		{
-			public DisplayManagerRenderTargetProvider(Func<Size, RenderTarget> callback) { Callback = callback; }
+			DisplayManagerRenderTargetProvider(Func<Size, RenderTarget> callback) { Callback = callback; }
 			Func<Size, RenderTarget> Callback;
 			RenderTarget IRenderTargetProvider.Get(Size size)
 			{
@@ -248,19 +248,12 @@ namespace BizHawk.Client.EmuHawk
 			if (Global.Config.DispPrescale != 1)
 			{
 				Filters.PrescaleFilter fPrescale = new Filters.PrescaleFilter() { Scale = Global.Config.DispPrescale };
-				chain.AddFilter(fPrescale, "user_prescale");
+				chain.AddFilter(fPrescale, "prescale");
 			}
 
 			//add user-selected retro shader
 			if (selectedChain != null)
 				AppendRetroShaderChain(chain, "retroShader", selectedChain, selectedChainProperties);
-
-			//AutoPrescale makes no sense for a None final filter
-			if (Global.Config.DispAutoPrescale && Global.Config.DispFinalFilter != (int)Filters.FinalPresentation.eFilterOption.None)
-			{
-				var apf = new Filters.AutoPrescaleFilter();
-				chain.AddFilter(apf, "auto_prescale");
-			}
 
 			//choose final filter
 			Filters.FinalPresentation.eFilterOption finalFilter = Filters.FinalPresentation.eFilterOption.None;
@@ -373,17 +366,11 @@ namespace BizHawk.Client.EmuHawk
 
 		public BitmapBuffer RenderVideoProvider(IVideoProvider videoProvider)
 		{
-			//TODO - we might need to gather more Global.Config.DispXXX properties here, so they can be overridden
-			var targetSize = new Size(videoProvider.BufferWidth, videoProvider.BufferHeight);
-			var padding = CalculateCompleteContentPadding(true,true);
-			targetSize.Width += padding.Horizontal;
-			targetSize.Height += padding.Vertical;
-
 			var job = new JobInfo
 			{
 				videoProvider = videoProvider,
 				simulate = false,
-				chain_outsize = targetSize,
+				chain_outsize = new Size(videoProvider.BufferWidth, videoProvider.BufferHeight),
 				offscreen = true,
 				includeOSD = false
 			};
@@ -391,9 +378,6 @@ namespace BizHawk.Client.EmuHawk
 			return job.offscreenBB;
 		}
 
-		/// <summary>
-		/// Does the entire display process to an offscreen buffer, suitable for a 'client' screenshot.
-		/// </summary>
 		public BitmapBuffer RenderOffscreen(IVideoProvider videoProvider, bool includeOSD)
 		{
 			var job = new JobInfo
@@ -494,7 +478,6 @@ namespace BizHawk.Client.EmuHawk
 				{
 					if (ar_integer)
 					{
-						//ALERT COPYPASTE LAUNDROMAT
 						Vector2 VS = new Vector2(virtualWidth, virtualHeight);
 						Vector2 BS = new Vector2(bufferWidth, bufferHeight);
 						Vector2 AR = Vector2.Divide(VS, BS);
@@ -597,7 +580,7 @@ namespace BizHawk.Client.EmuHawk
 		FilterProgram UpdateSourceInternal(JobInfo job)
 		{
 			//no drawing actually happens. it's important not to begin drawing on a control
-			if (!job.simulate && !job.offscreen)
+			if (!job.simulate)
 			{
 				GlobalWin.GLManager.Activate(CR_GraphicsControl);
 			}
@@ -688,7 +671,6 @@ namespace BizHawk.Client.EmuHawk
 			fPresent.Config_FixAspectRatio = Global.Config.DispFixAspectRatio;
 			fPresent.Config_FixScaleInteger = Global.Config.DispFixScaleInteger;
 			fPresent.Padding = ClientExtraPadding;
-			fPresent.AutoPrescale = Global.Config.DispAutoPrescale;
 
 			fPresent.GL = GL;
 
@@ -716,16 +698,12 @@ namespace BizHawk.Client.EmuHawk
 			//do i need to check this on an intel video card to see if running excessively is a problem? (it used to be in the FinalTarget command below, shouldnt be a problem)
 			//GraphicsControl.Begin(); //CRITICAL POINT for yabause+GL
 
-			//TODO - auto-create and age these (and dispose when old)
-			int rtCounter = 0;
-
-			CurrentFilterProgram.RenderTargetProvider = new DisplayManagerRenderTargetProvider((size) => ShaderChainFrugalizers[rtCounter++].Get(size));
-
 			GlobalWin.GL.BeginScene();
 
 			//run filter chain
 			Texture2d texCurr = null;
 			RenderTarget rtCurr = null;
+			int rtCounter = 0;
 			bool inFinalTarget = false;
 			foreach (var step in CurrentFilterProgram.Program)
 			{
@@ -781,29 +759,12 @@ namespace BizHawk.Client.EmuHawk
 				//apply the vsync setting (should probably try to avoid repeating this)
 				bool vsync = Global.Config.VSyncThrottle || Global.Config.VSync;
 
-				//only used by alternate vsync
-				var dx9 = GlobalWin.GL as BizHawk.Bizware.BizwareGL.Drivers.SlimDX.IGL_SlimDX9;
-
 				//ok, now this is a bit undesireable.
 				//maybe the user wants vsync, but not vsync throttle.
 				//this makes sense... but we dont have the infrastructure to support it now (we'd have to enable triple buffering or something like that)
 				//so what we're gonna do is disable vsync no matter what if throttling is off, and maybe nobody will notice.
-				//update 26-mar-2016: this upsets me. When fastforwarding and skipping frames, vsync should still work. But I'm not changing it yet
 				if (Global.DisableSecondaryThrottling)
 					vsync = false;
-
-				//for now, it's assumed that the presentation panel is the main window, but that may not always be true
-				bool alternateVsync = false;
-				if (dx9 != null)
-				{
-					alternateVsync = Global.Config.DispAlternateVsync && vsync && Global.Config.VSyncThrottle;
-					//unset normal vsync if we've chosen the alternate vsync
-					if (alternateVsync)
-						vsync = false;
-				}
-
-				//TODO - whats so hard about triple buffering anyway? just enable it always, and change api to SetVsync(enable,throttle)
-				//maybe even SetVsync(enable,throttlemethod) or just SetVsync(enable,throttle,advanced)
 
 				if (LastVsyncSetting != vsync || LastVsyncSettingGraphicsControl != presentationPanel.GraphicsControl)
 				{
@@ -811,22 +772,14 @@ namespace BizHawk.Client.EmuHawk
 					{
 						// Workaround for vsync not taking effect at startup (Intel graphics related?)
 						presentationPanel.GraphicsControl.SetVsync(false);
-					
 					}
 					presentationPanel.GraphicsControl.SetVsync(vsync);
 					LastVsyncSettingGraphicsControl = presentationPanel.GraphicsControl;
 					LastVsyncSetting = vsync;
 				}
 
-				//wait for vsync to begin
-				if (alternateVsync) dx9.AlternateVsyncPass(0);
-
 				//present and conclude drawing
 				presentationPanel.GraphicsControl.SwapBuffers();
-
-				//wait for vsync to end
-				if (alternateVsync) dx9.AlternateVsyncPass(1);
-
 
 				//nope. dont do this. workaround for slow context switching on intel GPUs. just switch to another context when necessary before doing anything
 				//presentationPanel.GraphicsControl.End();

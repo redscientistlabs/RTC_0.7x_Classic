@@ -466,7 +466,7 @@
             this.RecentRomSubMenu,
             this.OpenAdvancedMenuItem,
 
-            //RTC_HIJACK : Hide Close ROM menu item
+			//RTC_HIJACK : Hide Close ROM menu item
             //this.CloseRomMenuItem,
 
             this.toolStripMenuItem1,
@@ -884,6 +884,7 @@
 			// 
 			// FlushSaveRAMMenuItem
 			// 
+			this.FlushSaveRAMMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F);
 			this.FlushSaveRAMMenuItem.Name = "FlushSaveRAMMenuItem";
 			this.FlushSaveRAMMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.FlushSaveRAMMenuItem.Text = "&Flush Save Ram";
@@ -1406,8 +1407,10 @@
             this.HotkeysMenuItem,
             this.DisplayConfigMenuItem,
             this.SoundMenuItem,
+
             //RTC_HIJACK : Hide Paths Menu Item
             //this.PathsMenuItem,
+
             this.FirmwaresMenuItem,
             this.MessagesMenuItem,
             this.AutofireMenuItem,
@@ -3278,6 +3281,7 @@
 			this.LinkConnectStatusBarButton.Size = new System.Drawing.Size(16, 17);
 			this.LinkConnectStatusBarButton.Text = "Link connection is currently enabled";
 			this.LinkConnectStatusBarButton.ToolTipText = "Link connection is currently enabled";
+			this.LinkConnectStatusBarButton.Click += new System.EventHandler(this.LinkConnectStatusBarButton_Click);
 			// 
 			// UpdateNotification
 			// 
@@ -3707,11 +3711,14 @@
 			this.Text = "BizHawk";
 			this.Activated += new System.EventHandler(this.MainForm_Activated);
 			this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
-            this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
-            this.Enter += new System.EventHandler(this.MainForm_Enter);
+
+			//RTC_HIJACK : Add ResizeEnd and FormClosing Handlers to MainForm.Designer.cs
+			this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+
+			this.Enter += new System.EventHandler(this.MainForm_Enter);
 			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseClick);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
 			this.Resize += new System.EventHandler(this.MainForm_Resize);

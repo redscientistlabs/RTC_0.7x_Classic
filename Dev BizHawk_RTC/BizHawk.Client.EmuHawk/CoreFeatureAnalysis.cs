@@ -169,19 +169,19 @@ namespace BizHawk.Client.EmuHawk
 				.GetTypes()
 				.Where(t => typeof(IEmulatorService).IsAssignableFrom(t))
 				.Where(t => t != typeof(IEmulatorService))
-				.Where(t => t.IsInterface);
+				.Where(t => t.IsInterface)
+				.Select(t => t.ToString());
 
 			var additionalServices = knownServies
-				.Where(t => !ci.Services.ContainsKey(t.ToString()))
-				.Where(t => !ci.NotApplicableTypes.Contains(t.ToString()))
-				.Where(t => !typeof(ISpecializedEmulatorService).IsAssignableFrom(t)); // We don't want to show these as unimplemented, they aren't expected services
+				.Where(s => !ci.Services.ContainsKey(s))
+				.Where(s => !ci.NotApplicableTypes.Contains(s));
 
-			foreach (Type service in additionalServices)
+			foreach (string servicename in additionalServices)
 			{
 				string img = "Bad";
 				var serviceNode = new TreeNode
 				{
-					Text = service.ToString(),
+					Text = servicename,
 					ForeColor = Color.Red,
 					ImageKey = img,
 					SelectedImageKey = img,

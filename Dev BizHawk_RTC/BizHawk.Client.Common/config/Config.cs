@@ -83,7 +83,7 @@ namespace BizHawk.Client.Common
 
 		public int TargetScanlineFilterIntensity = 128; // choose between 0 and 256
 		public int TargetDisplayFilter = 0;
-		public int DispFinalFilter = 1; //bilinear
+		public int DispFinalFilter = 0;
 		public string DispUserFilterPath = "";
 		public RecentFiles RecentRoms = new RecentFiles(10);
 		public RecentFiles RecentRomSessions = new RecentFiles(8); // Only used for MultiHawk
@@ -108,12 +108,12 @@ namespace BizHawk.Client.Common
 		public bool InputConfigAutoTab = true;
 		public bool ShowLogWindow = false;
 
-        //RTC_HIJACK : Put BackupSavestates to False
+		//RTC_HIJACK : Put BackupSavestates to False
 		public bool BackupSavestates = false;
 
 		public bool BackupSaveram = true;
 
-        //RTC_HIJACK : Put SaveScreenshotWithStates to False
+		//RTC_HIJACK : Put SaveScreenshotWithStates to False
 		public bool SaveScreenshotWithStates = false;
 
 		public int BigScreenshotSize = 128 * 1024;
@@ -188,13 +188,13 @@ namespace BizHawk.Client.Common
 		public bool Rewind_UseDelta = true;
 		public bool RewindEnabledSmall = true;
 
-        //RTC_HIJACK : Put RewindEnable for Medium And Large to true
-        public bool RewindEnabledMedium = true;
-        public bool RewindEnabledLarge = true;
+		//RTC_HIJACK : Put RewindEnable for Medium to true
+		public bool RewindEnabledMedium = true;
 
+		public bool RewindEnabledLarge = false;
 		public int RewindFrequencySmall = 1;
 
-        //RTC_HIJACK : Put RewindFrequencyMedium to 1
+		//RTC_HIJACK : Put RewindFrequencyMedium to 1
 		public int RewindFrequencyMedium = 1;
 
 		public int RewindFrequencyLarge = 60;
@@ -213,16 +213,8 @@ namespace BizHawk.Client.Common
 		public int SaveStateCompressionLevelRewind = DefaultSaveStateCompressionLevelRewind;//this isnt actually used yet 
 		public int MovieCompressionLevel = 2;
 
-		/// <summary>
-		/// Use vsync when presenting all 3d accelerated windows.
-		/// For the main window, if VSyncThrottle = false, this will try to use vsync without throttling to it
-		/// </summary>
+		/// <summary>use vsync.  if VSyncThrottle = false, this will try to use vsync without throttling to it</summary>
 		public bool VSync = false;
-
-		/// <summary>
-		/// Tries to use an alternate vsync mechanism, for video cards that just can't do it right
-		/// </summary>
-		public bool DispAlternateVsync = false;
 
 		public static class DefaultMessageOptions
 		{
@@ -270,10 +262,10 @@ namespace BizHawk.Client.Common
 		public bool DisplayRerecordCount = false;
 		public bool DisplayMessages = true;
 
+		public bool DispBlurry = false; // make display look ugly
 		public bool DispFixAspectRatio = true;
-		public bool DispFixScaleInteger = false;
+		public bool DispFixScaleInteger = true;
 		public bool DispFullscreenHacks = true;
-		public bool DispAutoPrescale = true;
 		public int DispSpeedupFeatures = 2;
 
 
@@ -341,11 +333,8 @@ namespace BizHawk.Client.Common
 		public ESoundOutputMethod SoundOutputMethod = ESoundOutputMethod.OpenAL;
 #endif
 		public bool SoundEnabled = true;
-		public bool SoundEnabledNormal = true;
-		public bool SoundEnabledRWFF = true;
 		public bool MuteFrameAdvance = true;
 		public int SoundVolume = 100; // Range 0-100
-		public int SoundVolumeRWFF = 50; // Range 0-100
 		public bool SoundThrottle = false;
 		public string SoundDevice = "";
 		public int SoundBufferSizeMs = 100;

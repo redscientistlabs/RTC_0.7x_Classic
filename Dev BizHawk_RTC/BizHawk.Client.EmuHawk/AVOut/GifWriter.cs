@@ -227,8 +227,5 @@ namespace BizHawk.Client.EmuHawk
 				f = null;
 			}
 		}
-
-		public bool UsesAudio { get { return false; } }
-		public bool UsesVideo { get { return true; } }
 	}
 }

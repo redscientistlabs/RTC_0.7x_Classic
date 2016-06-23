@@ -18,7 +18,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 		isReleased: true
 		)]
 	[ServiceNotApplicable(typeof(IDriveLight))]
-	public partial class GambatteLink : IEmulator, IVideoProvider, ISyncSoundProvider, IInputPollable, ISaveRam, IStatable, ILinkable,
+	public partial class GambatteLink : IEmulator, IVideoProvider, ISyncSoundProvider, IInputPollable, ISaveRam, IStatable,
 		IDebuggable, ISettable<GambatteLink.GambatteLinkSettings, GambatteLink.GambatteLinkSyncSettings>
 	{
 		public GambatteLink(CoreComm comm, GameInfo leftinfo, byte[] leftrom, GameInfo rightinfo, byte[] rightrom, object Settings, object SyncSettings, bool deterministic)
@@ -48,8 +48,8 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 			comm.RomStatusDetails = "LEFT:\r\n" + L.CoreComm.RomStatusDetails + "RIGHT:\r\n" + R.CoreComm.RomStatusDetails;
 			comm.NominalWidth = L.CoreComm.NominalWidth + R.CoreComm.NominalWidth;
 			comm.NominalHeight = L.CoreComm.NominalHeight;
-
-			LinkConnected = true;
+			comm.UsesLinkCable = true;
+			comm.LinkConnected = true;
 
 			Frame = 0;
 			LagCount = 0;
@@ -62,8 +62,6 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 
 			SetMemoryDomains();
 		}
-
-		public bool LinkConnected { get; private set; }
 
 		bool disposed = false;
 
@@ -128,7 +126,7 @@ namespace BizHawk.Emulation.Cores.Nintendo.Gameboy
 			{
 				cableconnected ^= true;
 				Console.WriteLine("Cable connect status to {0}", cableconnected);
-				LinkConnected = cableconnected;
+				CoreComm.LinkConnected = cableconnected;
 			}
 			cablediscosignal = cablediscosignal_new;
 

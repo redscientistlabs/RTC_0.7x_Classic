@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using SlimDX;
 using SlimDX.DirectInput;
-using System.Runtime.InteropServices;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -123,7 +122,7 @@ namespace BizHawk.Client.EmuHawk
 		private readonly List<string> names = new List<string>();
 		private readonly List<Func<bool>> actions = new List<Func<bool>>();
 
-        void AddItem(string _name, Func<bool> callback)
+		void AddItem(string _name, Func<bool> callback)
 		{
 			names.Add(_name);
 			actions.Add(callback);

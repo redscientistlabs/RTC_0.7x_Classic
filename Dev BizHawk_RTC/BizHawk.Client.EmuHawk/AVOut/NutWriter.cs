@@ -138,8 +138,5 @@ namespace BizHawk.Client.EmuHawk
 		{
 			// ignored
 		}
-
-		public bool UsesAudio { get { return true; } }
-		public bool UsesVideo { get { return true; } }
 	}
 }

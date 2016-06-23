@@ -87,7 +87,7 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.MOS
             _todDen = todDen;
         }
 
-        public Cia(int todNum, int todDen, Func<bool[]> keyboard, Func<bool[]> joysticks) : this(todNum, todDen)
+        public Cia(int todNum, int todDen, int[] keyboard, int[] joysticks) : this(todNum, todDen)
         {
             _port = new JoystickKeyboardPort(joysticks, keyboard);
         }
@@ -164,7 +164,7 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.MOS
                 _prb &= 0x7F;
                 _tbPrb7NegativeNextCycle = false;
             }
-
+            
 
             switch (_taState)
             {
@@ -268,11 +268,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.MOS
             {
                 CheckIrqs();
             }
-
-            if ((_cra & 0x02) != 0)
-                _ddra |= 0x40;
-            if ((_crb & 0x02) != 0)
-                _ddrb |= 0x80;
         }
 
         private void Ta_Count()
@@ -417,9 +412,9 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.MOS
                 _tbState = TimerState.LoadThenCount;
             }
 
-            if ((_crb & 0x02) != 0)
+            if ((_cra & 0x02) != 0)
             {
-                if ((_crb & 0x04) != 0)
+                if ((_cra & 0x04) != 0)
                 {
                     _tbPrb7NegativeNextCycle = true;
                     _prb |= 0x80;
@@ -428,6 +423,7 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.MOS
                 {
                     _prb ^= 0x80;
                 }
+                _ddrb |= 0x80;
             }
         }
 

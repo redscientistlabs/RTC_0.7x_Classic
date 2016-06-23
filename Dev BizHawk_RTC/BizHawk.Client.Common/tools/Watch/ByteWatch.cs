@@ -35,8 +35,8 @@ namespace BizHawk.Client.Common
 		/// <param name="previous">Previous value</param>
 		/// <param name="changeCount">How many times value has changed</param>
 		/// <exception cref="ArgumentException">Occurs when a <see cref="DisplayType"/> is incompatible with <see cref="WatchSize.Byte"/></exception>
-        
-        //RTC_HIJACK : Make ByteWatch Constructor public
+
+		//RTC_HIJACK : Make ByteWatch Constructor public
 		public ByteWatch(MemoryDomain domain, long address, DisplayType type, bool bigEndian, string note, byte value, byte previous, int changeCount)
 			: base(domain, address, WatchSize.Byte, type, bigEndian, note)
 		{

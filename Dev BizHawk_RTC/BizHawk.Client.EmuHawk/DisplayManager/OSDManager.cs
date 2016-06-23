@@ -133,12 +133,12 @@ namespace BizHawk.Client.EmuHawk
 
 		public void AddMessage(string message)
 		{
-            //RTC_HIJACK : Disable OSD Messages
-            if (!RTC.RTC_Core.Bizhawk_OSD_Enabled)
-                return;
-            //--------------------------------
+			//RTC_HIJACK : Disable OSD Messages (Add this block)
+			if (!RTC.RTC_Core.Bizhawk_OSD_Enabled)
+				return;
+			//--------------------------------
 
-            GlobalWin.DisplayManager.NeedsToPaint = true;
+			GlobalWin.DisplayManager.NeedsToPaint = true;
 			messages.Add(new UIMessage { Message = message, ExpireAt = DateTime.Now + TimeSpan.FromSeconds(2) });
 		}
 

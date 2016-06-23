@@ -111,8 +111,7 @@ namespace BizHawk.Client.EmuHawk
 				{
 					Text = systemDisplayName,
 					Name = systemId,
-					Width = UIHelper.ScaleX(200), // Initial Left/Width of child controls are based on this size.
-					AutoScroll = true
+					Width = UIHelper.ScaleX(200) // Initial Left/Width of child controls are based on this size.
 				};
 				var paths = pathCollection.Where(x => x.System == systemId).OrderBy(x => x.Ordinal).ThenBy(x => x.Type).ToList();
 

@@ -39,6 +39,7 @@ namespace BizHawk.Emulation.Common
 		/// <summary>
 		// note that (some?) cores expect you to call SoundProvider.GetSamples() after each FrameAdvance()
 		// please do this, even when rendersound = false
+		/// <summary>
 		/// </summary>
 		void FrameAdvance(bool render, bool rendersound = true);
 

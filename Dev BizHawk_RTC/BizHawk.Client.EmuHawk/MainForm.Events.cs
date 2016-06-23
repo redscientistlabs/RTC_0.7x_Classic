@@ -52,6 +52,7 @@ namespace BizHawk.Client.EmuHawk
 			if (SaveRAMSubMenu.Font.Bold != needBold)
 			{
 				var font = new System.Drawing.Font(SaveRAMSubMenu.Font, needBold ? FontStyle.Bold : FontStyle.Regular);
+				SaveRAMSubMenu.Font.Dispose();
 				SaveRAMSubMenu.Font = font;
 			}
 		}
@@ -2752,8 +2753,6 @@ namespace BizHawk.Client.EmuHawk
 
 		private void FormDragDrop_internal(object sender, DragEventArgs e)
 		{
-            _FormDragDrop_internal(sender, e);
-/*
 			var filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
 			var isLua = false;
 			foreach (var path in filePaths)
@@ -2854,7 +2853,6 @@ namespace BizHawk.Client.EmuHawk
 				args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = filePaths[0] };
 				LoadRom(filePaths[0], args);
 			}
- */
 		}
 
 		#endregion

@@ -6,9 +6,9 @@ BizHawk is a multi-system emulator written in C#. BizHawk provides nice features
 
 === Download Binaries === 
 
-Windows users, don't forget to run the [prereq installer](http://github.com/TASVideos/BizHawk-Prereqs/releases) first!
+Windows users, don't forget to run the [prereq installer](http://sourceforge.net/projects/bizhawk/files/Prerequisites/bizhawk_prereqs_v1.1.zip/download) first!
 
-Binaries can be found on [on github](http://github.com/TASVideos/BizHawk/releases)
+Binaries can be found on [the sourceforge page](https://sourceforge.net/projects/bizhawk/?source=navbar)
 
 === Supported Systems === 
 

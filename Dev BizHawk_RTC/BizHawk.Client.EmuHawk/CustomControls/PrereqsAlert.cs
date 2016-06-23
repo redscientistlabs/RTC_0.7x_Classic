@@ -19,13 +19,13 @@ namespace BizHawk.Client.EmuHawk.CustomControls
 		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			linkLabel1.LinkVisited = true;
-			System.Diagnostics.Process.Start("http://tasvideos.org/Bizhawk.html");
+			System.Diagnostics.Process.Start("https://sourceforge.net/projects/bizhawk/files/Prerequisites");
 		}
 
 		private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			linkLabel2.LinkVisited = true;
-			System.Diagnostics.Process.Start("http://sf.net/projects/bizhawk");
+			System.Diagnostics.Process.Start("http://tasvideos.org/Bizhawk.html");
 		}
 
 		private void button1_Click(object sender, EventArgs e)

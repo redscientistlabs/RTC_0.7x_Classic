@@ -15,7 +15,7 @@ namespace RTC
 
     public static class RTC_Core
     {
-		public static string RtcVersion = "0.76b";
+		public static string RtcVersion = "0.77";
 
         public static HexEditor hexeditor = null;
 

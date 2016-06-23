@@ -9,16 +9,16 @@ namespace BizHawk.Client.EmuHawk
 		{
 			switch (trigger)
 			{
-                //RTC_HIJACK : Hook for HOTKEY_CHECK
-                default:
-                    if (!RTC.RTC_Hooks.HOTKEY_CHECK(trigger))
-                        return false;
-                    else
-                        break;
-                //---------------------
+				//RTC_HIJACK : Hook for HOTKEY_CHECK
+				default:
+					if (!RTC.RTC_Hooks.HOTKEY_CHECK(trigger))
+						return false;
+					else
+						break;
+				//---------------------
 
-                // General
-                case "Pause":
+				// General
+				case "Pause":
 					TogglePause();
 					break;
 				case "Toggle Throttle":

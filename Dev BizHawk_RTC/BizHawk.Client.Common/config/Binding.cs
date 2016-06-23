@@ -116,9 +116,9 @@ namespace BizHawk.Client.Common
 					s_DefaultValues = new List<Binding>
 					{
 						Bind("General", "Frame Advance", "F"),
-						Bind("General", "Rewind", "Shift+R, X1 LeftTrigger"),
+						Bind("General", "Rewind", "Shift+R, J1 B7, X1 LeftTrigger"),
 						Bind("General", "Pause", "Pause"),
-						Bind("General", "Fast Forward", "Tab, X1 RightTrigger"),
+						Bind("General", "Fast Forward", "Tab, J1 B8, X1 RightTrigger"),
 						Bind("General", "Turbo", "Shift+Tab"),
 						Bind("General", "Toggle Throttle"),
 						Bind("General", "Soft Reset"),
@@ -131,8 +131,10 @@ namespace BizHawk.Client.Common
 						Bind("General", "Full Screen", "Alt+Return"),
 						Bind("General", "Open ROM", "Ctrl+O"),
 
-                        //RTC_HIJACK : We remove Close ROM feature
+
+						//RTC_HIJACK : We remove Close ROM feature
 						//Bind("General", "Close ROM", "Ctrl+W"),
+
 
 						Bind("General", "Load Last ROM"),
 						Bind("General", "Display FPS"),
@@ -242,27 +244,27 @@ namespace BizHawk.Client.Common
 						Bind("Analog", "X Up Large", toolTip: "For Virtual Pad"),
 						Bind("Analog", "X Down Small", toolTip: "For Virtual Pad"),
 						Bind("Analog", "X Down Large", toolTip: "For Virtual Pad"),
-
-                        //RTC_HIJACK : Hotkey binding menu hijack
+			
+						//RTC_HIJACK : Hotkey binding menu hijack
                         // Unfortunately this has to be inserted directly in the project because hooking it into RTC
                         // would create a circular dependency in BizHawk
                         Bind("RTC","Manual Blast", toolTip: "For RTC" ),
-                        Bind("RTC","Start/Stop AutoCorrupt", toolTip: "For RTC" ),
-                        Bind("RTC","Error Delay--", toolTip: "For RTC" ),
-                        Bind("RTC","Error Delay++", toolTip: "For RTC" ),
-                        Bind("RTC","Intensity--", toolTip: "For RTC" ),
-                        Bind("RTC","Intensity++", toolTip: "For RTC" ),
-                        Bind("RTC","GH Load and Corrupt", toolTip: "For RTC" ),
-                        Bind("RTC","GH Corrupt w/o Load", toolTip: "For RTC" ),
-                        Bind("RTC","GH Load", toolTip: "For RTC" ),
-                        Bind("RTC","GH Save", toolTip: "For RTC" ),
-                        Bind("RTC","Reset TimeStack","", toolTip: "For RTC" ),
-                        Bind("RTC","TimeStack Jump", "X1 Guide",toolTip: "For RTC" ),
-                        Bind("RTC","Induce KS Crash", toolTip: "For RTC" ),
-                        Bind("RTC","Send Raw to Stash", toolTip: "For RTC" ),
-                        Bind("RTC","Blast Toggle", toolTip: "For RTC" ),
+						Bind("RTC","Start/Stop AutoCorrupt", toolTip: "For RTC" ),
+						Bind("RTC","Error Delay--", toolTip: "For RTC" ),
+						Bind("RTC","Error Delay++", toolTip: "For RTC" ),
+						Bind("RTC","Intensity--", toolTip: "For RTC" ),
+						Bind("RTC","Intensity++", toolTip: "For RTC" ),
+						Bind("RTC","GH Load and Corrupt", toolTip: "For RTC" ),
+						Bind("RTC","GH Corrupt w/o Load", toolTip: "For RTC" ),
+						Bind("RTC","GH Load", toolTip: "For RTC" ),
+						Bind("RTC","GH Save", toolTip: "For RTC" ),
+						Bind("RTC","Reset TimeStack","", toolTip: "For RTC" ),
+						Bind("RTC","TimeStack Jump", "X1 Guide",toolTip: "For RTC" ),
+						Bind("RTC","Induce KS Crash", toolTip: "For RTC" ),
+						Bind("RTC","Send Raw to Stash", toolTip: "For RTC" ),
+						Bind("RTC","Blast Toggle", toolTip: "For RTC" ),
                         //------------------
-			
+
 					};
 
 					//set ordinals based on order in list

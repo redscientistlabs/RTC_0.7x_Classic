@@ -25,9 +25,9 @@ namespace BizHawk.Client.EmuHawk
 		[RequiredService]
 		private GPGX Emulator { get; set; }
 
-        //RTC_HIJACK : set MemoryDomains property to public
-        [RequiredService]
-        public IMemoryDomains MemoryDomains { get; set; }
+		//RTC_HIJACK : set MemoryDomains property to public
+		[RequiredService]
+		public IMemoryDomains MemoryDomains { get; set; }
 
 		private readonly Dictionary<char, int> _gameGenieTable = new Dictionary<char, int>
 		{

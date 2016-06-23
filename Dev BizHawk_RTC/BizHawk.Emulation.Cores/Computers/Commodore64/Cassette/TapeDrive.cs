@@ -5,7 +5,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cassette
 {
     public class TapeDrive : CassettePortDevice
     {
-        [SaveState.SaveWithName("Tape")]
         private Tape _tape;
 
         public override void ExecutePhase2()
@@ -36,11 +35,6 @@ namespace BizHawk.Emulation.Cores.Computers.Commodore64.Cassette
         public void Insert(Tape tape)
         {
             _tape = tape;
-        }
-
-        public void RemoveMedia()
-        {
-            _tape = null;
         }
     }
 }

@@ -1,29 +1,12 @@
 CXX = g++
-RM = rm
-CP = cp
-
-MACHINE = $(shell $(CXX) -dumpmachine)
-ifneq (,$(findstring i686,$(MACHINE)))
-	ARCH = 32
-else ifneq (,$(findstring x86_64,$(MACHINE)))
-	ARCH = 64
-else
-	$(error Unknown arch)
-endif
-
-CXXFLAGS_32 = -march=pentium4 -mtune=core2
-CXXFLAGS_64 =
-CXXFLAGS = -Wall -DDISABLE_AUTO_FILE -D__LIBRETRO__ -DNDEBUG -I.. -O3 -Wno-multichar -fno-exceptions -fomit-frame-pointer -flto $(CXXFLAGS_$(ARCH)) 
+CXXFLAGS = -Wall -DDISABLE_AUTO_FILE -D__LIBRETRO__ -DNDEBUG -I.. -O3 -Wno-multichar -fno-exceptions -fomit-frame-pointer -march=pentium4 -mtune=core2 -flto
 # TODO: include these as options in the Makefile
 # -fprofile-generate
 # -fprofile-use
 TARGET = libquicknes.dll
-LDFLAGS_32 = -static -static-libgcc -static-libstdc++
-LDFLAGS_64 =
-LDFLAGS = -shared $(LDFLAGS_$(ARCH)) $(CXXFLAGS)
-
-DEST_32 = ../../output/dll
-DEST_64 = ../../output64/dll
+LDFLAGS = -shared -static -static-libgcc -static-libstdc++ $(CXXFLAGS)
+RM = rm
+CP = cp
 
 SRCS = \
 	../nes_emu/abstract_file.cpp \
@@ -79,4 +62,4 @@ clean:
 	$(RM) $(TARGET)
 	
 install:
-	$(CP) $(TARGET) $(DEST_$(ARCH))
+	$(CP) $(TARGET) ../../output/dll
