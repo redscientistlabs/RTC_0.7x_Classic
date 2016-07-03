@@ -187,10 +187,7 @@ namespace BizHawk.Client.Common
 		// Rewind settings
 		public bool Rewind_UseDelta = true;
 		public bool RewindEnabledSmall = true;
-
-		//RTC_HIJACK : Put RewindEnable for Medium to true
-		public bool RewindEnabledMedium = true;
-
+		public bool RewindEnabledMedium = false;
 		public bool RewindEnabledLarge = false;
 		public int RewindFrequencySmall = 1;
 
@@ -263,7 +260,10 @@ namespace BizHawk.Client.Common
 		public bool DisplayMessages = true;
 
 		public bool DispBlurry = false; // make display look ugly
-		public bool DispFixAspectRatio = true;
+
+		//RTC_HIJACK : Disable Fix Aspect Radio in default config
+		public bool DispFixAspectRatio = false;
+
 		public bool DispFixScaleInteger = true;
 		public bool DispFullscreenHacks = true;
 		public int DispSpeedupFeatures = 2;

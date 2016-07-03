@@ -106,7 +106,9 @@ namespace RTC
 
                 RTC_Restore.IsEnabled = true;
 
-                GlobalWin.MainForm.Focus();
+			this.BringToFront();
+			this.Focus();
+            GlobalWin.MainForm.Focus();
 
         }
 

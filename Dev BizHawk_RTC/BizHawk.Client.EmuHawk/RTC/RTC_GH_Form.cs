@@ -692,20 +692,27 @@ namespace RTC
             RTC_Restore.SaveRestore();
         }
 
-        private void btnRemoveSelectedStockpile_Click(object sender, EventArgs e)
-        {
-            if (lbStockpile.SelectedIndex != -1)
-                lbStockpile.Items.RemoveAt(lbStockpile.SelectedIndex);
+        private void btnRemoveSelectedStockpile_Click(object sender, EventArgs e) => RemoveSelected();
+		public void RemoveSelected(bool force = false)
+		{
+			if (lbStockpile.SelectedIndex != -1)
+				if (force || MessageBox.Show($"Are you sure you want to remove item \"{lbStockpile.SelectedItem.ToString()}\" from Stockpile?", "Remove Item", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				{
+					lbStockpile.Items.RemoveAt(lbStockpile.SelectedIndex);
+					RTC_Restore.SaveRestore();
+				}
+		}
 
-            RTC_Restore.SaveRestore();
-        }
+		private void btnClearStockpile_Click(object sender, EventArgs e) => ClearStockpile();
+		public void ClearStockpile(bool force = false)
+		{
+			if (force || MessageBox.Show("Are you sure you want to clear the stockpile?", "Clearing stockpile", MessageBoxButtons.YesNo) != DialogResult.Yes)
+			{
+				lbStockpile.Items.Clear();
 
-        private void btnClearStockpile_Click(object sender, EventArgs e)
-        {
-            lbStockpile.Items.Clear();
-
-            RTC_Restore.SaveRestore();
-        }
+				RTC_Restore.SaveRestore();
+			}
+		}
 
         private void btnLoadStockpile_Click(object sender, EventArgs e)
         {
@@ -866,7 +873,10 @@ namespace RTC
                 lbStockpile.Items.Insert(pos - 1, o);
                 lbStockpile.SelectedIndex = pos-1;
             }
-        }
+
+			RTC_Restore.SaveRestore();
+
+		}
 
         private void btnStockpileMoveSelectedDown_Click(object sender, EventArgs e)
         {
@@ -890,7 +900,10 @@ namespace RTC
                 lbStockpile.Items.Insert(pos + 1, o);
                 lbStockpile.SelectedIndex = pos + 1;
             }
-        }
+
+			RTC_Restore.SaveRestore();
+
+		}
 
         private void btnStopRender_Click(object sender, EventArgs e)
         {
@@ -1197,6 +1210,27 @@ namespace RTC
 
         }
 
+		private void btnRenameSelected_Click(object sender, EventArgs e)
+		{
+			if (lbStockpile.SelectedIndex != -1)
+			{
 
-    }
+				string Name = "";
+				string value = "";
+
+				if (this.InputBox("Harvester", "Enter the new Stash name:", ref value) == DialogResult.OK)
+				{
+					Name = value.Trim();
+				}
+				else
+				{
+					return;
+				}
+
+				(lbStockpile.SelectedItem as StashKey).Alias = Name;
+				lbStockpile.RefreshItemsReal();
+
+			}
+		}
+	}
 }

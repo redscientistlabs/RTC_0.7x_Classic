@@ -146,6 +146,7 @@ namespace RTC
             */
 
             coreForm.Show();
+
             RTC_RPC.Start();
             
         }

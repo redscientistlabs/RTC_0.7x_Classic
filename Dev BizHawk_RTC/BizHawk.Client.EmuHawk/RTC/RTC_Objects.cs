@@ -24,7 +24,15 @@ namespace RTC
 
     }
 
-    public class MenuButton : Button
+	public class RefreshingListBox : ListBox
+	{
+		public void RefreshItemsReal()
+		{
+			base.RefreshItems();
+		}
+	}
+
+	public class MenuButton : Button
     {
         [DefaultValue(null)]
         public ContextMenuStrip Menu { get; set; }
