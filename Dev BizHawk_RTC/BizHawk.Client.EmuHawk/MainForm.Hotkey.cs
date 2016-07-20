@@ -56,7 +56,9 @@ namespace BizHawk.Client.EmuHawk
 					OpenRom();
 					break;
 				case "Close ROM":
-					CloseRom();
+					//RTC_HIJACK : Disable normal CloseRom and replace with RTC CloseRom
+					//CloseRom();
+					RTC.RTC_Hooks.CLOSE_GAME(true);
 					break;
 				case "Load Last ROM":
 					LoadRomFromRecent(Global.Config.RecentRoms.MostRecent);

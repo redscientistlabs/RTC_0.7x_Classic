@@ -61,12 +61,15 @@ namespace RTC
                     _domain = "ROM";
                     break;
                 case "SMS": // Sega Master System
-                    MessageBox.Show("Unfortunately, Bizhawk doesn't support editing the Sega Master System's rom while it is running. Maybe in a future version...");
-                    return null;
+					_domain = "ROM";
+					return null;
                 case "GEN": // Sega Genesis
                     _domain = "MD CART";
                     break;
-                case "INTV":
+				case "PSX": // PlayStation
+					MessageBox.Show("Unfortunately, Bizhawk doesn't support editing the PSX's ISO while it is running. Maybe in a future version...");
+					return null;
+				case "INTV":
                 case "SG":
                 case "GG":
                 case "PCECD":

@@ -62,13 +62,16 @@ namespace RTC
 
             if (key != null)
             {
-
+				
                 t.Stop();
                 t.Start();
-
+				
                 ts_buffer.Enqueue(key);
                 key = ts_buffer.Dequeue();
 
+				//removed screenshot previewing to save ressources
+
+				/*
                 Bitmap bmp = MainForm.MakeScreenshotImage().ToSysdrawingBitmap();
 
                 for(int y = 0; y<bmp.Size.Height;y++)
@@ -88,10 +91,9 @@ namespace RTC
                 GlobalWin.MainForm.BackColor = Color.Black;
                 GlobalWin.MainForm.BackgroundImage = new Bitmap(bmp, bmpsize);
 
-
                 GlobalWin.MainForm.PresentationPanel.Control.Visible = false;
-                    
-
+                */
+				
                 if (ts_buffer.Count == 0)
                 {
                     
@@ -100,13 +102,14 @@ namespace RTC
                     RTC_Core.LoadStateCorruptorSafe(key + ".timestack.timejump", null);
                     RTC_RPC.SendToKillSwitch("UNFREEZE");
 
-                    
+					/*
                     GlobalWin.MainForm.BackColor = System.Drawing.SystemColors.Control;
                     GlobalWin.MainForm.BackgroundImage = null;
 
                     GlobalWin.MainForm.PresentationPanel.Control.Visible = true;
                     GlobalWin.MainForm.Activate();
                     GlobalWin.MainForm.Focus();
+					*/
                 }
 
                 RTC_TimeFlow.JumpStep();

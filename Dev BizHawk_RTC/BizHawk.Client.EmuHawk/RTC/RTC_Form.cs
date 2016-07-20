@@ -67,8 +67,10 @@ namespace RTC
             else
                 RTC_Core.AutoCorrupt = false;
 
+			if(RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
 
-            RTC_Restore.SaveRestore();
+			RTC_Restore.SaveRestore();
         }
 
         private void RTC_Form_Load(object sender, EventArgs e)
@@ -181,7 +183,10 @@ namespace RTC
                     break;
             }
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void cbBlastType_SelectedIndexChanged(object sender, EventArgs e)
@@ -201,14 +206,20 @@ namespace RTC
                     break;
             }
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void nmMaxCheats_ValueChanged(object sender, EventArgs e)
         {
             RTC_HellgenieEngine.MaxCheats = Convert.ToInt32(nmMaxCheats.Value);
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void lbMemoryZones_SelectedIndexChanged(object sender, EventArgs e)
@@ -272,7 +283,10 @@ namespace RTC
             RTC_DistortionEngine.MaxAge = Convert.ToInt32(nmDistortionDelay.Value);
             btnResyncDistortionEngine_Click(sender, e);
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void btnResyncDistortionEngine_Click(object sender, EventArgs e)
@@ -457,7 +471,10 @@ namespace RTC
         {
             RTC_ExternalRomPlugin.SelectedPlugin = (sender as ComboBox).SelectedItem.ToString();
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void cbUseTimeStack_CheckedChanged(object sender, EventArgs e)
@@ -478,14 +495,24 @@ namespace RTC
 
         private void nmTimeStackDelay_ValueChanged(object sender, EventArgs e)
         {
-            RTC_TimeStack.TimeStackDelay = Convert.ToInt32(nmTimeStackDelay.Value);
+			UpdateTimeStackDelay();
 
-            RTC_Restore.SaveRestore();
+		}
 
-        }
+		public void UpdateTimeStackDelay()
+		{
+			RTC_TimeStack.TimeStackDelay = Convert.ToInt32(nmTimeStackDelay.Value);
+			if (cbUseTimeStack.Checked)
+			{
+				RTC_TimeStack.Stop();
+				RTC_TimeStack.Start();
+			}
 
+			RTC_Restore.SaveRestore();
 
-        private void cbSelectedEngine_SelectedIndexChanged(object sender, EventArgs e)
+		}
+
+		private void cbSelectedEngine_SelectedIndexChanged(object sender, EventArgs e)
         {
             gbNightmareEngine.Visible = false;
             gbHellgenieEngine.Visible = false;
@@ -579,8 +606,10 @@ namespace RTC
             }
 
             RTC_HellgenieEngine.ClearCheats();
+			if(RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
 
-            RTC_Restore.SaveRestore();
+			RTC_Restore.SaveRestore();
         }
 
         private void nmIteratorSteps_ValueChanged(object sender, KeyPressEventArgs e)
@@ -605,13 +634,14 @@ namespace RTC
 
         private void nmTimeStackDelay_ValueChanged(object sender, KeyPressEventArgs e)
         {
+			UpdateTimeStackDelay();
 
-        }
+		}
 
         private void nmTimeStackDelay_ValueChanged(object sender, KeyEventArgs e)
         {
-
-        }
+			UpdateTimeStackDelay();
+		}
 
         private void cbClearFreezesOnRewind_CheckedChanged(object sender, EventArgs e)
         {
@@ -630,7 +660,10 @@ namespace RTC
         {
             RTC_FreezeEngine.MaxFreezes = Convert.ToInt32(nmMaxFreezes.Value);
 
-            RTC_Restore.SaveRestore();
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.RecalculateCorruptFactor();
+
+			RTC_Restore.SaveRestore();
         }
 
         private void btnDashboard_Click(object sender, EventArgs e)
@@ -779,6 +812,29 @@ namespace RTC
             RTC_Core.EasyButtonMenu.Show(this, locate);
         }
 
-    }
+		private void btnManualBlast_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.pbManualBlast.BackColor = Color.DarkRed;
+		}
+
+		private void btnManualBlast_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (RTC_Core.tfForm != null && RTC_Core.tfForm.Visible)
+				RTC_Core.tfForm.pbManualBlast.BackColor = Color.Black;
+		}
+
+		private void btnManualBlast_MouseLeave(object sender, EventArgs e)
+		{
+			btnManualBlast_MouseUp(null, null);
+		}
+
+		private void btnBlastEditor_Click(object sender, EventArgs e)
+		{
+			RTC_Core.spForm.Show();
+
+			RTC_Restore.SaveRestore();
+		}
+	}
 
 }

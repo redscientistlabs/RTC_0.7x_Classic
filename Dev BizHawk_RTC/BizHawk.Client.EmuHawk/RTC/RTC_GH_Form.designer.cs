@@ -82,7 +82,6 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.btnRemoveSelectedStockpile = new System.Windows.Forms.Button();
 			this.btnAddStashToStockpile = new System.Windows.Forms.Button();
-			this.lbStockpile = new RTC.RefreshingListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.cbBackupHistory = new System.Windows.Forms.CheckBox();
 			this.cbLoadOnSelect = new System.Windows.Forms.CheckBox();
@@ -110,6 +109,7 @@
 			this.btnCloudSave = new System.Windows.Forms.Button();
 			this.btnSendRaw = new System.Windows.Forms.Button();
 			this.btnRenameSelected = new System.Windows.Forms.Button();
+			this.lbStockpile = new RTC.RefreshingListBox();
 			this.pnBottomPanel.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -817,18 +817,6 @@
 			this.btnAddStashToStockpile.UseVisualStyleBackColor = false;
 			this.btnAddStashToStockpile.Click += new System.EventHandler(this.btnAddStashToStockpile_Click);
 			// 
-			// lbStockpile
-			// 
-			this.lbStockpile.BackColor = System.Drawing.Color.Black;
-			this.lbStockpile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.lbStockpile.FormattingEnabled = true;
-			this.lbStockpile.Location = new System.Drawing.Point(301, 93);
-			this.lbStockpile.Name = "lbStockpile";
-			this.lbStockpile.ScrollAlwaysVisible = true;
-			this.lbStockpile.Size = new System.Drawing.Size(281, 303);
-			this.lbStockpile.TabIndex = 106;
-			this.lbStockpile.SelectedIndexChanged += new System.EventHandler(this.lbStockpile_SelectedIndexChanged);
-			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.cbBackupHistory);
@@ -1174,6 +1162,18 @@
 			this.btnRenameSelected.UseVisualStyleBackColor = false;
 			this.btnRenameSelected.Click += new System.EventHandler(this.btnRenameSelected_Click);
 			// 
+			// lbStockpile
+			// 
+			this.lbStockpile.BackColor = System.Drawing.Color.Black;
+			this.lbStockpile.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+			this.lbStockpile.FormattingEnabled = true;
+			this.lbStockpile.Location = new System.Drawing.Point(301, 93);
+			this.lbStockpile.Name = "lbStockpile";
+			this.lbStockpile.ScrollAlwaysVisible = true;
+			this.lbStockpile.Size = new System.Drawing.Size(281, 303);
+			this.lbStockpile.TabIndex = 106;
+			this.lbStockpile.SelectedIndexChanged += new System.EventHandler(this.lbStockpile_SelectedIndexChanged);
+			// 
 			// RTC_GH_Form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1267,7 +1267,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnImportStockpile;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnBlastToggle;
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.CheckBox cbRenderAtCorrupt;
         public System.Windows.Forms.CheckBox cbRenderAtLoad;
@@ -1319,5 +1318,6 @@
         private System.Windows.Forms.TextBox tbCorruptCloudCode;
         public System.Windows.Forms.Button btnSendRaw;
 		private System.Windows.Forms.Button btnRenameSelected;
+		public System.Windows.Forms.Button btnBlastToggle;
 	}
 }

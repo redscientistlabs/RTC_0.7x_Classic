@@ -446,6 +446,9 @@
 			this.btnManualBlast.Text = "Manual Blast";
 			this.btnManualBlast.UseVisualStyleBackColor = false;
 			this.btnManualBlast.Click += new System.EventHandler(this.btnManualBlast_Click);
+			this.btnManualBlast.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnManualBlast_MouseDown);
+			this.btnManualBlast.MouseLeave += new System.EventHandler(this.btnManualBlast_MouseLeave);
+			this.btnManualBlast.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnManualBlast_MouseUp);
 			// 
 			// labelErrorDelaySteps
 			// 
@@ -540,16 +543,16 @@
             "RANDOM",
             "RANDOMTILT",
             "TILT"});
-			this.cbBlastType.Location = new System.Drawing.Point(75, 22);
+			this.cbBlastType.Location = new System.Drawing.Point(62, 22);
 			this.cbBlastType.Name = "cbBlastType";
-			this.cbBlastType.Size = new System.Drawing.Size(89, 21);
+			this.cbBlastType.Size = new System.Drawing.Size(105, 21);
 			this.cbBlastType.TabIndex = 13;
 			this.cbBlastType.SelectedIndexChanged += new System.EventHandler(this.cbBlastType_SelectedIndexChanged);
 			// 
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(5, 26);
+			this.label9.Location = new System.Drawing.Point(4, 26);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(60, 13);
 			this.label9.TabIndex = 12;
@@ -636,29 +639,30 @@
 			this.rbExternalStatic.Dock = System.Windows.Forms.DockStyle.Top;
 			this.rbExternalStatic.Location = new System.Drawing.Point(0, 0);
 			this.rbExternalStatic.Name = "rbExternalStatic";
-			this.rbExternalStatic.Size = new System.Drawing.Size(383, 32);
+			this.rbExternalStatic.Size = new System.Drawing.Size(384, 32);
 			this.rbExternalStatic.TabIndex = 70;
 			// 
 			// btnBlastEditor
 			// 
 			this.btnBlastEditor.BackColor = System.Drawing.Color.Black;
 			this.btnBlastEditor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnBlastEditor.ForeColor = System.Drawing.Color.Silver;
-			this.btnBlastEditor.Location = new System.Drawing.Point(301, 5);
+			this.btnBlastEditor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+			this.btnBlastEditor.Location = new System.Drawing.Point(280, 5);
 			this.btnBlastEditor.Name = "btnBlastEditor";
-			this.btnBlastEditor.Size = new System.Drawing.Size(70, 24);
+			this.btnBlastEditor.Size = new System.Drawing.Size(95, 24);
 			this.btnBlastEditor.TabIndex = 109;
-			this.btnBlastEditor.Text = "Blast Editor";
+			this.btnBlastEditor.Text = "Stockpile Player";
 			this.btnBlastEditor.UseVisualStyleBackColor = false;
+			this.btnBlastEditor.Click += new System.EventHandler(this.btnBlastEditor_Click);
 			// 
 			// btnDashboard
 			// 
 			this.btnDashboard.BackColor = System.Drawing.Color.Black;
 			this.btnDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnDashboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnDashboard.Location = new System.Drawing.Point(227, 5);
+			this.btnDashboard.Location = new System.Drawing.Point(213, 5);
 			this.btnDashboard.Name = "btnDashboard";
-			this.btnDashboard.Size = new System.Drawing.Size(70, 24);
+			this.btnDashboard.Size = new System.Drawing.Size(64, 24);
 			this.btnDashboard.TabIndex = 108;
 			this.btnDashboard.Text = "Time Map";
 			this.btnDashboard.UseVisualStyleBackColor = false;
@@ -668,11 +672,11 @@
 			// 
 			this.label11.AutoSize = true;
 			this.label11.ForeColor = System.Drawing.Color.White;
-			this.label11.Location = new System.Drawing.Point(59, 14);
+			this.label11.Location = new System.Drawing.Point(52, 14);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(34, 13);
+			this.label11.Size = new System.Drawing.Size(28, 13);
 			this.label11.TabIndex = 86;
-			this.label11.Text = RTC_Core.RtcVersion;
+			this.label11.Text = "0.78";
 			// 
 			// btnReboot
 			// 
@@ -680,7 +684,7 @@
 			this.btnReboot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnReboot.ForeColor = System.Drawing.Color.OrangeRed;
 			this.btnReboot.Image = global::BizHawk.Client.EmuHawk.Properties.Resources.reboot;
-			this.btnReboot.Location = new System.Drawing.Point(99, 5);
+			this.btnReboot.Location = new System.Drawing.Point(88, 5);
 			this.btnReboot.Name = "btnReboot";
 			this.btnReboot.Size = new System.Drawing.Size(26, 24);
 			this.btnReboot.TabIndex = 86;
@@ -693,7 +697,7 @@
 			this.pnLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnLogo.BackgroundImage")));
 			this.pnLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.pnLogo.Cursor = System.Windows.Forms.Cursors.Default;
-			this.pnLogo.Location = new System.Drawing.Point(9, 4);
+			this.pnLogo.Location = new System.Drawing.Point(4, 4);
 			this.pnLogo.Name = "pnLogo";
 			this.pnLogo.Size = new System.Drawing.Size(50, 24);
 			this.pnLogo.TabIndex = 78;
@@ -704,9 +708,9 @@
 			this.btnGlitchHarvester.BackColor = System.Drawing.Color.Black;
 			this.btnGlitchHarvester.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnGlitchHarvester.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-			this.btnGlitchHarvester.Location = new System.Drawing.Point(129, 5);
+			this.btnGlitchHarvester.Location = new System.Drawing.Point(117, 5);
 			this.btnGlitchHarvester.Name = "btnGlitchHarvester";
-			this.btnGlitchHarvester.Size = new System.Drawing.Size(94, 24);
+			this.btnGlitchHarvester.Size = new System.Drawing.Size(93, 24);
 			this.btnGlitchHarvester.TabIndex = 107;
 			this.btnGlitchHarvester.Text = "Glitch Harvester";
 			this.btnGlitchHarvester.UseVisualStyleBackColor = false;
@@ -743,7 +747,7 @@
 			// 
 			this.nmDistortionDelay.BackColor = System.Drawing.Color.Black;
 			this.nmDistortionDelay.ForeColor = System.Drawing.Color.Gold;
-			this.nmDistortionDelay.Location = new System.Drawing.Point(101, 22);
+			this.nmDistortionDelay.Location = new System.Drawing.Point(97, 22);
 			this.nmDistortionDelay.Maximum = new decimal(new int[] {
             65536,
             0,
@@ -755,7 +759,7 @@
             0,
             0});
 			this.nmDistortionDelay.Name = "nmDistortionDelay";
-			this.nmDistortionDelay.Size = new System.Drawing.Size(63, 20);
+			this.nmDistortionDelay.Size = new System.Drawing.Size(67, 20);
 			this.nmDistortionDelay.TabIndex = 9;
 			this.nmDistortionDelay.Value = new decimal(new int[] {
             50,
@@ -1564,7 +1568,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.SteelBlue;
-			this.ClientSize = new System.Drawing.Size(383, 580);
+			this.ClientSize = new System.Drawing.Size(384, 580);
 			this.Controls.Add(this.gbFreezeEngineActive);
 			this.Controls.Add(this.gbDistortionEngine);
 			this.Controls.Add(this.gbExternalRomPlugin);

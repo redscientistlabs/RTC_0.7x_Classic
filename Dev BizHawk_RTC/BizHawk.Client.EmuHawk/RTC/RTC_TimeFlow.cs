@@ -99,6 +99,8 @@ namespace RTC
 
         public static Bitmap CropBitmap(Bitmap bitmap, int cropX, int cropY, int cropWidth, int cropHeight)
         {
+			if(RTC_Core.tfForm.WindowState == System.Windows.Forms.FormWindowState.Minimized)
+				return null;
 
             Rectangle rect;
 

@@ -96,7 +96,10 @@ namespace BizHawk.Client.Common
 		public int MainWidth = -1;
 		public int MainHeight = -1;
 		public bool RunInBackground = true;
-		public bool AcceptBackgroundInput = false;
+
+		//RTC_HIJACK : Accept Background input by default
+		public bool AcceptBackgroundInput = true;
+
 		public bool SingleInstanceMode = false;
 		public bool AllowUD_LR = false;
 		public bool ForbidUD_LR = false;
@@ -187,7 +190,9 @@ namespace BizHawk.Client.Common
 		// Rewind settings
 		public bool Rewind_UseDelta = true;
 		public bool RewindEnabledSmall = true;
-		public bool RewindEnabledMedium = false;
+		//RTC_HIJACK : Put RewindEnabledMedium to true
+		public bool RewindEnabledMedium = true;
+
 		public bool RewindEnabledLarge = false;
 		public int RewindFrequencySmall = 1;
 
@@ -198,7 +203,10 @@ namespace BizHawk.Client.Common
 		public int Rewind_MediumStateSize = 262144; //256kb
 		public int Rewind_LargeStateSize = 1048576; //1mb
 		public int Rewind_BufferSize = 128; //in mb
-		public bool Rewind_OnDisk = false;
+
+		//RTC_HIJACK : But rewind back on disk true because of Garbage Collector hitching
+		public bool Rewind_OnDisk = true;
+
 		public bool Rewind_IsThreaded = Environment.ProcessorCount > 1;
 		public int RewindSpeedMultiplier = 1;
 
@@ -261,10 +269,10 @@ namespace BizHawk.Client.Common
 
 		public bool DispBlurry = false; // make display look ugly
 
-		//RTC_HIJACK : Disable Fix Aspect Radio in default config
-		public bool DispFixAspectRatio = false;
+		public bool DispFixAspectRatio = true;
 
-		public bool DispFixScaleInteger = true;
+		//RTC_HIJACK : Disable DispFixScaleInteger in default config
+		public bool DispFixScaleInteger = false;
 		public bool DispFullscreenHacks = true;
 		public int DispSpeedupFeatures = 2;
 

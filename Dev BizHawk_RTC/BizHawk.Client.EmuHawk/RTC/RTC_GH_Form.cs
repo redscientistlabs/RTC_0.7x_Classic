@@ -74,13 +74,21 @@ namespace RTC
                     btnBlastToggle.BackColor = Color.Red;
                     btnBlastToggle.ForeColor = Color.Black;
                     btnBlastToggle.Text = "ON";
-                }
+
+					RTC_Core.spForm.btnBlastToggle.BackColor = Color.Red;
+					RTC_Core.spForm.btnBlastToggle.ForeColor = Color.Black;
+					RTC_Core.spForm.btnBlastToggle.Text = "BlastLayer Corruption Toggle ON";
+				}
                 else
                 {
                     btnBlastToggle.BackColor = Color.Black;
                     btnBlastToggle.ForeColor = Color.Silver;
                     btnBlastToggle.Text = "OFF";
-                }
+
+					RTC_Core.spForm.btnBlastToggle.BackColor = Color.Black;
+					RTC_Core.spForm.btnBlastToggle.ForeColor = Color.Silver;
+					RTC_Core.spForm.btnBlastToggle.Text = "BlastLayer Corruption Toggle OFF";
+				}
 
                 _IsCorruptionApplied = value;
             }
@@ -166,17 +174,20 @@ namespace RTC
             RTC_Restore.SaveRestore();
         }
 
-        public void LoadState()
+        public bool LoadState()
         {
 
 
-            LoadState("btn", RTC_Core.currentGameSystem, RTC_Core.currentGameName);
+            if(!LoadState("btn", RTC_Core.currentGameSystem, RTC_Core.currentGameName))
+				return false;
+
             IsCorruptionApplied = false;
 
             RTC_Restore.SaveRestore();
+			return true;
         }
 
-        public void LoadState(string _key, string GameSystem, string GameName)
+        public bool LoadState(string _key, string GameSystem, string GameName)
         {
 
             string Key;
@@ -191,15 +202,13 @@ namespace RTC
 
                 if (ChangeGameWarning(btnAttachedRom[Convert.ToInt32(currentSelectedState)]))
                 {
-                    var args = new BizHawk.Client.EmuHawk.MainForm.LoadRomArgs();
-                    args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = btnAttachedRom[Convert.ToInt32(currentSelectedState)] };
-                    GlobalWin.MainForm.LoadRom(btnAttachedRom[Convert.ToInt32(currentSelectedState)], args);
-                    GameHasChanged = true;
+					RTC_Core.LoadRom(btnAttachedRom[Convert.ToInt32(currentSelectedState)]);
+					GameHasChanged = true;
                 }
                 else
                 {
                     GlobalWin.Sound.StartSound();
-                    return;
+                    return false;
                 }
 
                 GlobalWin.Sound.StartSound();
@@ -207,12 +216,12 @@ namespace RTC
             else if (_key == null)
             {
                 RTC_Restore.SaveRestore();
-                return;
+                return false;
             }
             else
                 Key = _key;
 
-
+			
             PathEntry pathEntry = Global.Config.PathEntries[Global.Game.System, "Savestates"] ??
             Global.Config.PathEntries[Global.Game.System, "Base"];
 
@@ -231,10 +240,11 @@ namespace RTC
                 GlobalWin.Sound.StopSound();
                 MessageBox.Show("Error loading savestate (File not found)");
                 GlobalWin.Sound.StartSound();
-                return;
+                return false;
             }
 
             RTC_Restore.SaveRestore();
+			return true;
         }
 
         public void SaveState()
@@ -252,157 +262,159 @@ namespace RTC
         }
 
 
-        public void btnCorrupt_Click(object sender, EventArgs e)
-        {
+		public void btnCorrupt_Click(object sender, EventArgs e)
+		{
 
-            if (RTC_Core.coreForm.cbClearCheatsOnRewind.Checked == true)
-                RTC_HellgenieEngine.ClearCheats();
+			if (RTC_Core.coreForm.cbClearCheatsOnRewind.Checked == true)
+				RTC_HellgenieEngine.ClearCheats();
 
-            if (cbAutoLoadState.Checked && btnCorrupt.Text.ToUpper() != "MERGE")
-                if (btnParentKeys[Convert.ToInt32(currentSelectedState)] != null)
-                {
-                    LoadState();
-                }
-                else
-                {
-                    GlobalWin.Sound.StopSound();
-                    MessageBox.Show("There is no SaveState in the selected box,\nPress 'Switch: Save/Load State' then Press 'SAVE'");
-                    GlobalWin.Sound.StartSound();
-                    return;
-                }
+			if (cbAutoLoadState.Checked && btnCorrupt.Text.ToUpper() != "MERGE")
+				if (btnParentKeys[Convert.ToInt32(currentSelectedState)] != null)
+				{
+					if (!LoadState())
+						return;
+				}
+				else
+				{
+					GlobalWin.Sound.StopSound();
+					MessageBox.Show("There is no SaveState in the selected box,\nPress 'Switch: Save/Load State' then Press 'SAVE'");
+					GlobalWin.Sound.StartSound();
+					return;
+				}
 
 
-            if (rbCorrupt.Checked)
-            {
-                BlastLayer bl = RTC_Core.Blast();
+			if (rbCorrupt.Checked)
+			{
+				BlastLayer bl = RTC_Core.Blast();
 
-                if(bl != null)
-                    IsCorruptionApplied = true;
+				if (bl != null)
+					IsCorruptionApplied = true;
 
-                if (cbStashCorrupted.Checked)
-                {
-                    if (bl == null)
-                        return;
+				if (cbStashCorrupted.Checked)
+				{
+					if (bl == null)
+						return;
 
-                    RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], bl);
+					RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], bl);
 
-                    DontLoadSelectedStash = true;
-                    lbStashHistory.Items.Add(RTC_Core.currentStashkey);
-                    lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
-                    lbStockpile.ClearSelected();
-                    
-                }
+					DontLoadSelectedStash = true;
+					lbStashHistory.Items.Add(RTC_Core.currentStashkey);
+					lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
+					lbStockpile.ClearSelected();
 
-                if(cbRenderAtCorrupt.Checked)
-                    StartRender();
+				}
 
-            }
-            else if (rbInject.Checked)
-            {
-                if (lbStashHistory.SelectedIndex == -1 && lbStockpile.SelectedIndex == -1)
-                    return;
+				if (cbRenderAtCorrupt.Checked)
+					StartRender();
 
-                if (cbAutoLoadState.Checked)
-                    if (btnParentKeys[Convert.ToInt32(currentSelectedState)] != null)
-                        LoadState();
-                    else
-                    {
-                        GlobalWin.Sound.StopSound();
-                        MessageBox.Show("There is no SaveState in the selected box,\nPress 'Switch: Save/Load State' then Press 'SAVE'");
-                        GlobalWin.Sound.StartSound();
-                        return;
-                    }
+			}
+			else if (rbInject.Checked)
+			{
+				if (lbStashHistory.SelectedIndex == -1 && lbStockpile.SelectedIndex == -1)
+					return;
 
-                if (lbStashHistory.SelectedIndex != -1)
-                {
-                    RTC_Core.currentStashkey = (lbStashHistory.SelectedItem as StashKey);
-                    RTC_Core.currentStashkey.Inject();
-                    IsCorruptionApplied = true;
-                }
+				if (cbAutoLoadState.Checked)
+					if (btnParentKeys[Convert.ToInt32(currentSelectedState)] != null)
+						LoadState();
+					else
+					{
+						GlobalWin.Sound.StopSound();
+						MessageBox.Show("There is no SaveState in the selected box,\nPress 'Switch: Save/Load State' then Press 'SAVE'");
+						GlobalWin.Sound.StartSound();
+						return;
+					}
 
-                if (lbStockpile.SelectedIndex != -1)
-                {
-                    RTC_Core.currentStashkey = (lbStockpile.SelectedItem as StashKey);
-                    RTC_Core.currentStashkey.Inject();
-                    IsCorruptionApplied = true;
-                }
+				if (lbStashHistory.SelectedIndex != -1)
+				{
+					RTC_Core.currentStashkey = (lbStashHistory.SelectedItem as StashKey);
+					RTC_Core.currentStashkey.Inject();
+					IsCorruptionApplied = true;
+				}
 
-                if (cbStashInjected.Checked)
-                {
-                    if(lbStashHistory.SelectedIndex != -1)
-                        RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], (lbStashHistory.SelectedItem as StashKey).blastlayer);
+				if (lbStockpile.SelectedIndex != -1)
+				{
+					RTC_Core.currentStashkey = (lbStockpile.SelectedItem as StashKey);
+					RTC_Core.currentStashkey.Inject();
+					IsCorruptionApplied = true;
+				}
 
-                    if(lbStockpile.SelectedIndex != -1)
-                        RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], (lbStockpile.SelectedItem as StashKey).blastlayer);
+				if (cbStashInjected.Checked)
+				{
+					if (lbStashHistory.SelectedIndex != -1)
+						RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], (lbStashHistory.SelectedItem as StashKey).blastlayer);
 
-                    DontLoadSelectedStash = true;
-                    lbStashHistory.Items.Add(RTC_Core.currentStashkey);
-                    lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
-                    lbStockpile.ClearSelected();
+					if (lbStockpile.SelectedIndex != -1)
+						RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), btnParentKeys[Convert.ToInt32(currentSelectedState)], (lbStockpile.SelectedItem as StashKey).blastlayer);
 
-                }
+					DontLoadSelectedStash = true;
+					lbStashHistory.Items.Add(RTC_Core.currentStashkey);
+					lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
+					lbStockpile.ClearSelected();
 
-                if (cbRenderAtCorrupt.Checked)
-                    StartRender();
+				}
 
-            }
-            else if (rbOriginal.Checked)
-            {
-                if (lbStashHistory.SelectedIndex == -1 && lbStockpile.SelectedIndex == -1)
-                    return;
+				if (cbRenderAtCorrupt.Checked)
+					StartRender();
 
-                if (lbStashHistory.SelectedIndex != -1)
-                {
-                    RTC_Core.currentStashkey = (lbStashHistory.SelectedItem as StashKey);
-                    RTC_Core.currentStashkey.RunOriginal();
-                    IsCorruptionApplied = false;
-                }
+			}
+			else if (rbOriginal.Checked)
+			{
+				if (lbStashHistory.SelectedIndex == -1 && lbStockpile.SelectedIndex == -1)
+					return;
 
-                if (lbStockpile.SelectedIndex != -1)
-                {
-                    RTC_Core.currentStashkey = (lbStockpile.SelectedItem as StashKey);
-                    IsCorruptionApplied = false;
-                }
+				if (lbStashHistory.SelectedIndex != -1)
+				{
+					RTC_Core.currentStashkey = (lbStashHistory.SelectedItem as StashKey);
+					RTC_Core.currentStashkey.RunOriginal();
+					IsCorruptionApplied = false;
+				}
 
-            }
-            else
-            {
-                if (lbStockpile.SelectedItems.Count > 1)
-                {
-                    BlastLayer bl = new BlastLayer();
+				if (lbStockpile.SelectedIndex != -1)
+				{
+					RTC_Core.currentStashkey = (lbStockpile.SelectedItem as StashKey);
+					IsCorruptionApplied = false;
+				}
 
-                    foreach (StashKey item in lbStockpile.SelectedItems)
-                        bl.Layer.AddRange(item.blastlayer.Layer);
+			}
+			else
+			{
+				if (lbStockpile.SelectedItems.Count > 1)
+				{
+					BlastLayer bl = new BlastLayer();
 
-                    //bl.Apply();
-                    isStockpileSelectMultiple = false;
+					foreach (StashKey item in lbStockpile.SelectedItems)
+						bl.Layer.AddRange(item.blastlayer.Layer);
 
-                    if (cbStashCorrupted.Checked)
-                    {
-                        if (bl == null)
-                            return;
+					//bl.Apply();
+					isStockpileSelectMultiple = false;
 
-                        RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), (lbStockpile.SelectedItem as StashKey).ParentKey, bl);
+					if (cbStashCorrupted.Checked)
+					{
+						if (bl == null)
+							return;
 
-                        ApplyCurrentStashkey();
+						RTC_Core.currentStashkey = new StashKey(RTC_Core.GetRandomKey(), (lbStockpile.SelectedItem as StashKey).ParentKey, bl);
 
-                        DontLoadSelectedStash = true;
-                        lbStashHistory.Items.Add(RTC_Core.currentStashkey);
-                        lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
-                        lbStockpile.ClearSelected();
-                        IsCorruptionApplied = true;
+						ApplyCurrentStashkey();
 
-                    }
+						DontLoadSelectedStash = true;
+						lbStashHistory.Items.Add(RTC_Core.currentStashkey);
+						lbStashHistory.SelectedIndex = lbStashHistory.Items.Count - 1;
+						lbStockpile.ClearSelected();
+						IsCorruptionApplied = true;
 
-                    if (cbRenderAtCorrupt.Checked)
-                        StartRender();
-                }
-                else
-                    MessageBox.Show("Select 2 or more items from the Current Stockpile to merge.");
-            }
+					}
 
-            RTC_Restore.SaveRestore();
-        }
+					if (cbRenderAtCorrupt.Checked)
+						StartRender();
+				}
+				else
+					MessageBox.Show("Select 2 or more items from the Current Stockpile to merge.");
+			}
+
+			RTC_Restore.SaveRestore();
+
+		}
 
         private void RTC_GH_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -457,7 +469,7 @@ namespace RTC
             RTC_Restore.SaveRestore();
         }
 
-        private void ApplyCurrentStashkey()
+        public void ApplyCurrentStashkey()
         {
             if (rbCorrupt.Checked)
             {
@@ -706,9 +718,18 @@ namespace RTC
 		private void btnClearStockpile_Click(object sender, EventArgs e) => ClearStockpile();
 		public void ClearStockpile(bool force = false)
 		{
-			if (force || MessageBox.Show("Are you sure you want to clear the stockpile?", "Clearing stockpile", MessageBoxButtons.YesNo) != DialogResult.Yes)
+			if (force || MessageBox.Show("Are you sure you want to clear the stockpile?", "Clearing stockpile", MessageBoxButtons.YesNo) == DialogResult.Yes)
 			{
 				lbStockpile.Items.Clear();
+
+				if (RTC_Core.currentStockpile != null)
+				{
+					RTC_Core.currentStockpile.Filename = null;
+					RTC_Core.currentStockpile.ShortFilename = null;
+				}
+
+				RTC_Core.ghForm.btnSaveStockpile.Enabled = false;
+				RTC_Core.ghForm.btnSaveStockpile.BackColor = Color.Gray;
 
 				RTC_Restore.SaveRestore();
 			}
@@ -716,11 +737,17 @@ namespace RTC
 
         private void btnLoadStockpile_Click(object sender, EventArgs e)
         {
-            GlobalWin.Sound.StopSound();
-			RTC_RPC.SendToKillSwitch("FREEZE");
-			Stockpile.Load();
-			RTC_RPC.SendToKillSwitch("UNFREEZE");
-			GlobalWin.Sound.StartSound();
+			try
+			{
+				GlobalWin.Sound.StopSound();
+				RTC_RPC.SendToKillSwitch("FREEZE");
+				Stockpile.Load();
+			}
+			finally
+			{
+				RTC_RPC.SendToKillSwitch("UNFREEZE");
+				GlobalWin.Sound.StartSound();
+			}
 
             RTC_Restore.SaveRestore();
         }
@@ -729,8 +756,10 @@ namespace RTC
         {
             if (lbStockpile.Items.Count == 0)
             {
-                MessageBox.Show("You cannot save the Stockpile because it is empty");
-                return;
+				GlobalWin.Sound.StopSound();
+				MessageBox.Show("You cannot save the Stockpile because it is empty");
+				GlobalWin.Sound.StartSound();
+				return;
             }
 
             GlobalWin.Sound.StopSound();

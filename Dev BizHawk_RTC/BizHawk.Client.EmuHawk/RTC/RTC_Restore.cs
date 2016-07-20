@@ -245,7 +245,7 @@ namespace RTC
 
                 RTC_Core.ghForm.lbStockpile.Items.AddRange(RTC_Status.StockpileListboxItems.ToArray());
 
-                RTC_Core.ghForm.cbBackupHistory.Checked = RTC_Status.BackupHistory;
+				RTC_Core.ghForm.cbBackupHistory.Checked = RTC_Status.BackupHistory;
 
                 if (RTC_Status.BackupHistory)
                     RTC_Core.ghForm.lbStashHistory.Items.AddRange(RTC_Status.StashHistoryListboxItems.ToArray());
@@ -270,9 +270,7 @@ namespace RTC
 
                 if (RTC_Core.lastOpenRom != null)
                 {
-                    var args = new BizHawk.Client.EmuHawk.MainForm.LoadRomArgs();
-                    args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = RTC_Core.lastOpenRom };
-                    GlobalWin.MainForm.LoadRom(RTC_Core.lastOpenRom, args);
+                    RTC_Core.LoadRom(RTC_Core.lastOpenRom);
                     RTC_MemoryZones.pendingSelectedDomains = RTC_Status.SelectedDomains;
                 }
                 else
@@ -286,11 +284,17 @@ namespace RTC
                 //Memory object references
                 RTC_Core.currentStockpile = RTC_Status.currentStockpile;
 
-                #endregion
+				if (RTC_Core.currentStockpile != null && RTC_Core.currentStockpile.Filename != null)
+				{
+					RTC_Core.ghForm.btnSaveStockpile.Enabled = true;
+					RTC_Core.ghForm.btnSaveStockpile.BackColor = Color.Tomato;
+				}
 
-                #region RTC_TimeStack & RTC_TimeFlow
+				#endregion
 
-                RTC_Core.coreForm.cbUseTimeStack.Checked = RTC_Status.TimeStack;
+				#region RTC_TimeStack & RTC_TimeFlow
+
+				RTC_Core.coreForm.cbUseTimeStack.Checked = RTC_Status.TimeStack;
                 RTC_Core.coreForm.nmTimeStackDelay.Value = Convert.ToDecimal(RTC_Status.TimeStackDelay);
 
                 if (RTC_Status.TimeStack)

@@ -174,19 +174,20 @@ namespace RTC
         }
 
         static bool CLOSE_GAME_loop_flag = false;
-        public static void CLOSE_GAME()
+        public static void CLOSE_GAME(bool loadDefault = false)
         {
             if (CLOSE_GAME_loop_flag == true)
                 return;
 
             CLOSE_GAME_loop_flag = true;
 
-            RTC_Core.AutoCorrupt = false;
+            //RTC_Core.AutoCorrupt = false;
             RTC_MemoryZones.Clear();
 
             RTC_Core.lastOpenRom = null;
 
-            RTC_Core.LoadDefaultRom();
+			if(loadDefault)
+				RTC_Core.LoadDefaultRom();
 
             //RTC_RPC.SendToKillSwitch("UNFREEZE");
 

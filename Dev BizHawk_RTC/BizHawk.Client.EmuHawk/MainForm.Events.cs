@@ -365,7 +365,9 @@ namespace BizHawk.Client.EmuHawk
 
 		private void CloseRomMenuItem_Click(object sender, EventArgs e)
 		{
-			CloseRom();
+			//RTC_HIJACK : Disable normal CloseRom and replace with RTC CloseRom
+			//CloseRom();
+			RTC.RTC_Hooks.CLOSE_GAME(true);
 		}
 
 		private void Savestate1MenuItem_Click(object sender, EventArgs e) { SaveQuickSave("QuickSave1"); }

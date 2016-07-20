@@ -465,10 +465,7 @@
             this.OpenRomMenuItem,
             this.RecentRomSubMenu,
             this.OpenAdvancedMenuItem,
-
-			//RTC_HIJACK : Hide Close ROM menu item
-            //this.CloseRomMenuItem,
-
+            this.CloseRomMenuItem,
             this.toolStripMenuItem1,
             this.SaveStateSubMenu,
             this.LoadStateSubMenu,
@@ -3318,10 +3315,7 @@
             this.ContextSeparator_AfterUndo,
             this.ConfigContextMenuItem,
             this.ScreenshotContextMenuItem,
-
-            //RTC_HIJACK : Hide Close ROM menu item
-            //this.CloseRomContextMenuItem,
-
+            this.CloseRomContextMenuItem,
             this.ClearSRAMContextMenuItem,
             this.ShowMenuContextMenuSeparator,
             this.ShowMenuContextMenuItem});

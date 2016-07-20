@@ -302,10 +302,12 @@ namespace RTC
 
 			//fill list controls
 			RTC_Core.ghForm.lbStockpile.Items.Clear();
+			RTC_Core.spForm.lbStockpile.Items.Clear();
 
 			foreach (StashKey key in sks.stashkeys)
 			{
 				RTC_Core.ghForm.lbStockpile.Items.Add(key);
+				RTC_Core.spForm.lbStockpile.Items.Add(key);
 			}
 
 

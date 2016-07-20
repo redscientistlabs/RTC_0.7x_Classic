@@ -15,7 +15,7 @@ namespace RTC
 
     public static class RTC_Core
     {
-		public static string RtcVersion = "0.77";
+		public static string RtcVersion = "0.78";
 
         public static HexEditor hexeditor = null;
 
@@ -70,7 +70,7 @@ namespace RTC
         //Forms
         public static RTC_Form coreForm = new RTC_Form();
         public static RTC_GH_Form ghForm = new RTC_GH_Form();
-        public static RTC_BE_Form beForm = new RTC_BE_Form();
+        public static RTC_SP_Form spForm = new RTC_SP_Form();
         public static RTC_TF_Form tfForm = new RTC_TF_Form();
 
         //Object references
@@ -114,38 +114,8 @@ namespace RTC
             EasyButtonMenu.Items.Add("Start with system template", null, new EventHandler(coreForm.btnEasyModeTemplate_Click));
 
 
-            /*
-            // transforming buttons into MenuButtons
-            System.Windows.Forms.Button btnReboot = new RTC.MenuButton();
-            btnReboot.BackColor = coreForm.btnReboot.BackColor;
-            btnReboot.FlatStyle = coreForm.btnReboot.FlatStyle;
-            btnReboot.ForeColor = coreForm.btnReboot.ForeColor;
-            btnReboot.Image = coreForm.btnReboot.Image;
-            btnReboot.Location = coreForm.btnReboot.Location;
-            btnReboot.Name = coreForm.btnReboot.Name;
-            btnReboot.Size = coreForm.btnReboot.Size;
-            btnReboot.TabIndex = coreForm.btnReboot.TabIndex;
-            btnReboot.UseVisualStyleBackColor = coreForm.btnReboot.UseVisualStyleBackColor;
-            (btnReboot as RTC.MenuButton).SetMenu(ParamsButtonMenu);
-            coreForm.btnReboot = btnReboot;
-
-            System.Windows.Forms.Button btnEasyMode = new RTC.MenuButton();
-            btnEasyMode.BackColor = coreForm.btnEasyMode.BackColor;
-            btnEasyMode.FlatStyle = coreForm.btnEasyMode.FlatStyle;
-            btnEasyMode.ForeColor = coreForm.btnEasyMode.ForeColor;
-            btnEasyMode.Image = coreForm.btnEasyMode.Image;
-            btnEasyMode.Location = coreForm.btnEasyMode.Location;
-            btnEasyMode.Name = coreForm.btnEasyMode.Name;
-            btnEasyMode.Size = coreForm.btnEasyMode.Size;
-            btnEasyMode.TabIndex = coreForm.btnEasyMode.TabIndex;
-            btnEasyMode.UseVisualStyleBackColor = coreForm.btnEasyMode.UseVisualStyleBackColor;
-            (btnEasyMode as RTC.MenuButton).SetMenu(EasyButtonMenu);
-            coreForm.btnEasyMode = btnEasyMode;
-
-            //--------------------------------------------------------
-            */
-
             coreForm.Show();
+			GlobalWin.MainForm.Focus();
 
             RTC_RPC.Start();
             
@@ -159,19 +129,9 @@ namespace RTC
         public static long LongRandom(long min, long max)
         {
             if(max > 2147483647)
-            {
-                /*
-            byte[] buf = new byte[8];
-            RND.NextBytes(buf);
-            long longRand = BitConverter.ToInt64(buf, 0);
-
-            return (Math.Abs(longRand % (max - min)) + min);
-                 * */
                 return (long)RND.Next((int)min, 2147483647);
-
-            }
             else
-            return (long)RND.Next((int)min, (int)max);
+				return (long)RND.Next((int)min, (int)max);
         }
 
         public static string EmuFolderCheck(string SystemDisplayName)
@@ -261,8 +221,8 @@ namespace RTC
                 {
                     BlastLayer bl = new BlastLayer();
 
-                    if (RTC_MemoryZones.SelectedDomains.Count == 0)
-                        return null;
+                    if (RTC_Core.SelectedEngine != CorruptionEngine.FREEZE && RTC_MemoryZones.SelectedDomains.Count == 0)
+						return null;
 
                     string Domain;
                     long MaxAdress;
@@ -278,7 +238,11 @@ namespace RTC
 
                             for (int i = 0; i < Intensity; i++) //Randomly spreads all corruption bytes to all selected zones
                             {
-                                Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
+								if (RTC_Core.SelectedEngine != CorruptionEngine.FREEZE)
+									Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
+								else
+									Domain = RTC_Core.hexeditor._domain.ToString();
+
                                 MaxAdress = RTC_MemoryZones.getDomain(Domain).Size;
                                 RandomAdress = LongRandom(MaxAdress);
 
@@ -291,8 +255,12 @@ namespace RTC
 
                         case BlastRadius.CHUNK: //Randomly spreads the corruption bytes in one randomly selected zone
 
-                            Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
-                            MaxAdress = RTC_MemoryZones.getDomain(Domain).Size;
+							if (RTC_Core.SelectedEngine != CorruptionEngine.FREEZE)
+								Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
+							else
+								Domain = RTC_Core.hexeditor._domain.ToString();
+
+							MaxAdress = RTC_MemoryZones.getDomain(Domain).Size;
 
                             for (int i = 0; i < Intensity; i++)
                             {
@@ -309,8 +277,12 @@ namespace RTC
 
                             for (int j = 0; j < 10; j++) // 10 shots of 10% chunk
                             {
-                                Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
-                                MaxAdress = RTC_MemoryZones.getDomain(Domain).Size;
+								if (RTC_Core.SelectedEngine != CorruptionEngine.FREEZE)
+									Domain = RTC_MemoryZones.SelectedDomains[RND.Next(RTC_MemoryZones.SelectedDomains.Count)];
+								else
+									Domain = RTC_Core.hexeditor._domain.ToString();
+
+								MaxAdress = RTC_MemoryZones.getDomain(Domain).Size;
 
                                 for (int i = 0; i < (int)((double)Intensity / 10); i++)
                                 {
@@ -410,17 +382,11 @@ namespace RTC
 
             var args = new BizHawk.Client.EmuHawk.MainForm.LoadRomArgs();
 
+			if (RomFile == null)
+				RomFile = GlobalWin.MainForm.CurrentlyOpenRom;
 
-            if (RomFile != null)
-            {
-                args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = RomFile };
-                GlobalWin.MainForm.LoadRom(RomFile, args); //reload rom (evade rom corruption)
-            }
-            else
-            {
-                args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = GlobalWin.MainForm.CurrentlyOpenRom };
-                GlobalWin.MainForm.LoadRom(GlobalWin.MainForm.CurrentlyOpenRom, args); //reload rom (evade rom corruption)
-            }
+			var lra = new BizHawk.Client.EmuHawk.MainForm.LoadRomArgs { OpenAdvanced = new OpenAdvanced_OpenRom { Path = RomFile } };
+			GlobalWin.MainForm.LoadRom(RomFile, lra);
 
             GlobalWin.DisplayManager.NeedsToPaint = true;
             GlobalWin.Sound.StartSound();
@@ -443,6 +409,8 @@ namespace RTC
 
         public static void LoadStateCorruptorSafe(string Key, string RomFile)
         {
+		
+			
             List<string> MemoryBanks = null;
 
             if (isLoaded)
@@ -457,21 +425,15 @@ namespace RTC
 
             var args = new BizHawk.Client.EmuHawk.MainForm.LoadRomArgs();
 
-            if (RomFile != null)
-            {
-                args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = RomFile };
-                GlobalWin.MainForm.LoadRom(RomFile, args); //reload rom (evade rom corruption)
-            }
-            else
-            {
-                args.OpenAdvanced = new OpenAdvanced_OpenRom { Path = GlobalWin.MainForm.CurrentlyOpenRom };
-                GlobalWin.MainForm.LoadRom(GlobalWin.MainForm.CurrentlyOpenRom, args); //reload rom (evade rom corruption)
-            }
+			if (RomFile == null)
+				RomFile = GlobalWin.MainForm.CurrentlyOpenRom;
 
+            LoadRom(RomFile); //reload rom (evade rom corruption)
             LoadSave(Key, false); //Load state
 
             GlobalWin.DisplayManager.NeedsToPaint = true;
             GlobalWin.Sound.StartSound();
+
 
             if (isLoaded)
             {
@@ -486,7 +448,7 @@ namespace RTC
                             break;
                         }
             }
-
+			
         }
 
         public static void SaveSave(string quickSlotName)

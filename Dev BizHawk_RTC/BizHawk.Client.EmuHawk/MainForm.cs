@@ -725,7 +725,7 @@ namespace BizHawk.Client.EmuHawk
 					ActiveForm is RTC.RTC_Form ||
 					ActiveForm is RTC.RTC_GH_Form ||
 					ActiveForm is RTC.RTC_TF_Form ||
-					ActiveForm is RTC.RTC_BE_Form
+					ActiveForm is RTC.RTC_SP_Form
                     )//--------------------------------------
 			{
 				return true;
@@ -3401,8 +3401,7 @@ namespace BizHawk.Client.EmuHawk
 				// the new settings objects
 				CommitCoreSettingsToConfig(); // adelikat: I Think by reordering things, this isn't necessary anymore
 
-				//RTC_HIJACK : Don't close the game
-				//CloseGame();
+				CloseGame();
 
 				var nextComm = CreateCoreComm();
 
@@ -3491,14 +3490,14 @@ namespace BizHawk.Client.EmuHawk
 					{
 						GlobalWin.Tools.Restart<LuaConsole>();
 					}
-
+					
 					//RTC_Hijack ignoring default.nes for Recent Menu
 					if (!loader.CanonicalFullPath.Contains("default.nes"))
 					{
 						Global.Config.RecentRoms.Add(loaderName);
 						JumpLists.AddRecentItem(loaderName, ioa.DisplayName);
 					}
-
+					
 					// Don't load Save Ram if a movie is being loaded
 					if (!Global.MovieSession.MovieIsQueued && File.Exists(PathManager.SaveRamPath(loader.Game)))
 					{
@@ -3614,12 +3613,7 @@ namespace BizHawk.Client.EmuHawk
 		// Like reboot core.
 		private void CloseGame(bool clearSram = false)
 		{
-			//RTC_HIJACK : Hook before CloseGame
-			RTC.RTC_Hooks.CLOSE_GAME();
-			if (Convert.ToBoolean(1)) //stupid call to bypass compilation warning
-				return;
-			//-----------
-
+			
 			GameIsClosing = true;
 			if (clearSram)
 			{
@@ -3653,6 +3647,11 @@ namespace BizHawk.Client.EmuHawk
 			RewireSound();
 			RebootStatusBarIcon.Visible = false;
 			GameIsClosing = false;
+
+			//RTC_HIJACK : Hook after CloseGame
+			RTC.RTC_Hooks.CLOSE_GAME();
+
+
 		}
 
 		public bool GameIsClosing { get; set; } // Lets tools make better decisions when being called by CloseGame

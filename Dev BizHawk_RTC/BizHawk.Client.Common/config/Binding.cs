@@ -130,12 +130,7 @@ namespace BizHawk.Client.Common
 						Bind("General", "Screenshot", "F12"),
 						Bind("General", "Full Screen", "Alt+Return"),
 						Bind("General", "Open ROM", "Ctrl+O"),
-
-
-						//RTC_HIJACK : We remove Close ROM feature
-						//Bind("General", "Close ROM", "Ctrl+W"),
-
-
+						Bind("General", "Close ROM", "Ctrl+W"),
 						Bind("General", "Load Last ROM"),
 						Bind("General", "Display FPS"),
 						Bind("General", "Frame Counter"),

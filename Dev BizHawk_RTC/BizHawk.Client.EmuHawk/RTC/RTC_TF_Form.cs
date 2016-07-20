@@ -36,7 +36,9 @@ namespace RTC
             t.Tick += new EventHandler(RefreshMap);
             t.Start();
             RTC_TimeFlow.Start();
-        }
+
+			RecalculateCorruptFactor();
+		}
 
         public void RefreshMap(object sender, EventArgs e)
         {
@@ -57,14 +59,37 @@ namespace RTC
 
         public void RefreshJumpLabel()
         {
-            lbAvailableJumps.Text = "Jumps Available: " + RTC_TimeStack.ts.Count().ToString();
+            lbAvailableJumps.Text = "TimeStack Jumps available: " + RTC_TimeStack.ts.Count().ToString();
         }
 
         public void RecalculateCorruptFactor()
         {
             double factor = Convert.ToDouble(RTC_Core.Intensity) / Convert.ToDouble(RTC_Core.IteratorSteps);
-            lbCorruptFactor.Text = "Corrupt factor: " + String.Format("{0:0.####}",factor) + "x";
-        }
+            lbCorruptFactor.Text = RTC_Core.SelectedEngine.ToString() + " @ " + String.Format("{0:0.####}",factor) + "x " + RTC_Core.Radius.ToString();
+
+			string EngineParams = "";
+
+			switch(RTC_Core.SelectedEngine)
+			{
+				case CorruptionEngine.NIGHTMARE:
+					EngineParams = $"[{RTC.RTC_NightmareEngine.Algo.ToString()}]";
+					break;
+				case CorruptionEngine.HELLGENIE:
+					EngineParams = $"[Cheats:{RTC.RTC_HellgenieEngine.MaxCheats.ToString()}]";
+					break;
+				case CorruptionEngine.DISTORTION:
+					EngineParams = $"[Delay:{RTC.RTC_DistortionEngine.MaxAge.ToString()}]";
+					break;
+				case CorruptionEngine.FREEZE:
+					EngineParams = $"[Freezes:{RTC.RTC_DistortionEngine.MaxAge.ToString()}]";
+					break;
+				case CorruptionEngine.EXTERNALROM:
+					EngineParams = $"[Plugin:{RTC.RTC_ExternalRomPlugin.SelectedPlugin.ToString()}]";
+					break;
+			}
+
+			lbIntensityErrorDelay.Text = $"{RTC_Core.Intensity.ToString()}/{RTC_Core.IteratorSteps.ToString()} " + EngineParams + (RTC_Core.AutoCorrupt ? " (AUTO)" : "");
+		}
 
         private void pnPanel_DoubleClick(object sender, EventArgs e)
         {
@@ -88,5 +113,5 @@ namespace RTC
             RTC_Restore.SaveRestore();
         }
 
-    }
+	}
 }

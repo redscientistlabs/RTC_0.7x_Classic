@@ -654,11 +654,11 @@
       <DependentUpon>RomStatusPicker.cs</DependentUpon>
     </Compile>
     <Compile Include="RTC\FastZipProgram.cs" />
-    <Compile Include="RTC\RTC_BE_Form.cs">
+    <Compile Include="RTC\RTC_SP_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RTC\RTC_BE_Form.designer.cs">
-      <DependentUpon>RTC_BE_Form.cs</DependentUpon>
+    <Compile Include="RTC\RTC_SP_Form.designer.cs">
+      <DependentUpon>RTC_SP_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="RTC\RTC_Core.cs" />
     <Compile Include="RTC\RTC_CorruptCloud.cs" />
@@ -1411,8 +1411,8 @@
     <EmbeddedResource Include="RomStatusPicker.resx">
       <DependentUpon>RomStatusPicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RTC\RTC_BE_Form.resx">
-      <DependentUpon>RTC_BE_Form.cs</DependentUpon>
+    <EmbeddedResource Include="RTC\RTC_SP_Form.resx">
+      <DependentUpon>RTC_SP_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RTC\RTC_Form.resx">
       <DependentUpon>RTC_Form.cs</DependentUpon>
