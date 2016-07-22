@@ -53,7 +53,7 @@ namespace RTC
 			else
 				lbStockpile.SelectedIndex--;
 
-			RTC_Restore.SaveRestore();
+			//RTC_Restore.SaveRestore();
 		}
 
 		private void btnNextItem_Click(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace RTC
 			else
 				lbStockpile.SelectedIndex++;
 
-			RTC_Restore.SaveRestore();
+			//RTC_Restore.SaveRestore();
 		}
 
 		private void lbStockpile_SelectedIndexChanged(object sender, EventArgs e)

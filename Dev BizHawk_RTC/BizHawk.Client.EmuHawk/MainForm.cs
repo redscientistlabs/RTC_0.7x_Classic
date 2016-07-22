@@ -2147,7 +2147,8 @@ namespace BizHawk.Client.EmuHawk
 			}
 		}
 
-		private void SaveConfig(string path = "")
+		//RTC_HIJACK : Make SaveConfig public
+		public void SaveConfig(string path = "")
 		{
 			if (Global.Config.SaveWindowPosition)
 			{

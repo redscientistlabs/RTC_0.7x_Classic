@@ -15,19 +15,23 @@ namespace RTC
         public static bool IsEnabled = false;
         public static RestoreFile RTC_Status = new RestoreFile();
         public static WindowRestoreFile RTC_WindowStatus = new WindowRestoreFile();
+		public static Object restoreLock = new Object();
 
-        public static void LoadRestore()
+		public static void LoadRestore()
         {
             try
             {
 
-                #region Loading the Restore.dat File
+				#region Loading the Restore.dat File
 
-                FileStream FS;
-                BinaryFormatter bformatter = new BinaryFormatter();
-                FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\Restore.dat", FileMode.OpenOrCreate);
-                RTC_Status = (RestoreFile)bformatter.Deserialize(FS);
-                FS.Close();
+				lock (restoreLock)
+				{
+					FileStream FS;
+					BinaryFormatter bformatter = new BinaryFormatter();
+					FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\Restore.dat", FileMode.OpenOrCreate);
+					RTC_Status = (RestoreFile)bformatter.Deserialize(FS);
+					FS.Close();
+				}
 
                 #endregion
 
@@ -530,20 +534,25 @@ namespace RTC
                 RTC_WindowStatus.MainFormLocation = GlobalWin.MainForm.Location;
                 RTC_WindowStatus.MainFormSize = GlobalWin.MainForm.Size;
 
-                #endregion
+				#endregion
 
-                #region Saving the Restore Files
+				#region Saving the Restore Files
 
-                FileStream FS;
-                BinaryFormatter bformatter = new BinaryFormatter();
-                FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\Restore.dat", FileMode.OpenOrCreate);
-                bformatter.Serialize(FS, RTC_Status);
-                FS.Close();
+				lock (restoreLock)
+				{
+					FileStream FS;
+					BinaryFormatter bformatter = new BinaryFormatter();
+					FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\Restore.dat", FileMode.OpenOrCreate);
+					bformatter.Serialize(FS, RTC_Status);
+					FS.Close();
 
-                bformatter = new BinaryFormatter();
-                FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\WindowRestore.dat", FileMode.OpenOrCreate);
-                bformatter.Serialize(FS, RTC_WindowStatus);
-                FS.Close();
+					bformatter = new BinaryFormatter();
+					FS = File.Open(RTC_Core.rtcDir + "\\SESSION\\WindowRestore.dat", FileMode.OpenOrCreate);
+					bformatter.Serialize(FS, RTC_WindowStatus);
+					FS.Close();
+				}
+
+				GlobalWin.MainForm.SaveConfig();
 
                 #endregion
 

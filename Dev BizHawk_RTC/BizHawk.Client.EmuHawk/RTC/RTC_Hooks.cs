@@ -163,7 +163,7 @@ namespace RTC
             }
             lastGameName = RTC_Core.currentGameName;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
 
             RTC_RPC.SendToKillSwitch("UNFREEZE");
 

@@ -32,12 +32,12 @@
 			this.pbTimeFlow = new System.Windows.Forms.PictureBox();
 			this.pbFullMap = new System.Windows.Forms.PictureBox();
 			this.pnTopPanel = new System.Windows.Forms.Panel();
+			this.pnLogo = new System.Windows.Forms.Panel();
 			this.pbManualBlast = new System.Windows.Forms.PictureBox();
+			this.lbTimeFlow = new RTC.LabelPassthrough();
 			this.lbIntensityErrorDelay = new RTC.LabelPassthrough();
 			this.lbCorruptFactor = new RTC.LabelPassthrough();
 			this.lbAvailableJumps = new RTC.LabelPassthrough();
-			this.lbTimeFlow = new RTC.LabelPassthrough();
-			this.pnLogo = new System.Windows.Forms.Panel();
 			((System.ComponentModel.ISupportInitialize)(this.pbTimeFlow)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pbFullMap)).BeginInit();
 			this.pnTopPanel.SuspendLayout();
@@ -83,6 +83,17 @@
 			this.pnTopPanel.TabIndex = 77;
 			this.pnTopPanel.DoubleClick += new System.EventHandler(this.pnPanel_DoubleClick);
 			// 
+			// pnLogo
+			// 
+			this.pnLogo.BackColor = System.Drawing.Color.MidnightBlue;
+			this.pnLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnLogo.BackgroundImage")));
+			this.pnLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.pnLogo.Cursor = System.Windows.Forms.Cursors.Default;
+			this.pnLogo.Location = new System.Drawing.Point(6, 4);
+			this.pnLogo.Name = "pnLogo";
+			this.pnLogo.Size = new System.Drawing.Size(50, 24);
+			this.pnLogo.TabIndex = 79;
+			// 
 			// pbManualBlast
 			// 
 			this.pbManualBlast.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -93,6 +104,19 @@
 			this.pbManualBlast.Size = new System.Drawing.Size(8, 32);
 			this.pbManualBlast.TabIndex = 64;
 			this.pbManualBlast.TabStop = false;
+			// 
+			// lbTimeFlow
+			// 
+			this.lbTimeFlow.AutoSize = true;
+			this.lbTimeFlow.Enabled = false;
+			this.lbTimeFlow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lbTimeFlow.ForeColor = System.Drawing.Color.White;
+			this.lbTimeFlow.Location = new System.Drawing.Point(56, 11);
+			this.lbTimeFlow.Margin = new System.Windows.Forms.Padding(0);
+			this.lbTimeFlow.Name = "lbTimeFlow";
+			this.lbTimeFlow.Size = new System.Drawing.Size(69, 16);
+			this.lbTimeFlow.TabIndex = 35;
+			this.lbTimeFlow.Text = "Time Map";
 			// 
 			// lbIntensityErrorDelay
 			// 
@@ -126,30 +150,6 @@
 			this.lbAvailableJumps.Size = new System.Drawing.Size(148, 13);
 			this.lbAvailableJumps.TabIndex = 23;
 			this.lbAvailableJumps.Text = "TimeStack Jumps available: 0";
-			// 
-			// lbTimeFlow
-			// 
-			this.lbTimeFlow.AutoSize = true;
-			this.lbTimeFlow.Enabled = false;
-			this.lbTimeFlow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lbTimeFlow.ForeColor = System.Drawing.Color.White;
-			this.lbTimeFlow.Location = new System.Drawing.Point(56, 11);
-			this.lbTimeFlow.Margin = new System.Windows.Forms.Padding(0);
-			this.lbTimeFlow.Name = "lbTimeFlow";
-			this.lbTimeFlow.Size = new System.Drawing.Size(69, 16);
-			this.lbTimeFlow.TabIndex = 35;
-			this.lbTimeFlow.Text = "Time Map";
-			// 
-			// pnLogo
-			// 
-			this.pnLogo.BackColor = System.Drawing.Color.MidnightBlue;
-			this.pnLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnLogo.BackgroundImage")));
-			this.pnLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.pnLogo.Cursor = System.Windows.Forms.Cursors.Default;
-			this.pnLogo.Location = new System.Drawing.Point(6, 4);
-			this.pnLogo.Name = "pnLogo";
-			this.pnLogo.Size = new System.Drawing.Size(50, 24);
-			this.pnLogo.TabIndex = 79;
 			// 
 			// RTC_TF_Form
 			// 

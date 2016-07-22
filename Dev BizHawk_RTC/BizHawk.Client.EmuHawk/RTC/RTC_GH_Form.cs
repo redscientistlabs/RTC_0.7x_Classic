@@ -183,7 +183,7 @@ namespace RTC
 
             IsCorruptionApplied = false;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
 			return true;
         }
 
@@ -832,7 +832,7 @@ namespace RTC
             else
                 lbStashHistory.SelectedIndex--;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void btnStashDOWN_Click(object sender, EventArgs e)
@@ -845,7 +845,7 @@ namespace RTC
                 else
                     lbStashHistory.SelectedIndex++;
 
-                RTC_Restore.SaveRestore();
+                //RTC_Restore.SaveRestore();
         }
 
         private void btnStockpileUP_Click(object sender, EventArgs e)
@@ -858,7 +858,7 @@ namespace RTC
             else
                 lbStockpile.SelectedIndex--;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void btnStockpileDOWN_Click(object sender, EventArgs e)
@@ -871,7 +871,7 @@ namespace RTC
             else
                 lbStockpile.SelectedIndex++;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void RTC_GH_Form_ResizeEnd(object sender, EventArgs e)
@@ -949,7 +949,7 @@ namespace RTC
 
             RTC_Core.coreForm.nmIntensity.Value = nmIntensity.Value;
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void track_Intensity_Scroll(object sender, EventArgs e)
@@ -962,7 +962,7 @@ namespace RTC
 
             RTC_Core.coreForm.nmIntensity.Value = Convert.ToDecimal(track_Intensity.Value);
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void cbBackupHistory_CheckedChanged(object sender, EventArgs e)

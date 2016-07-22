@@ -145,10 +145,15 @@ namespace RTC
 
             List<string> AllRoms = new List<string>();
 
-            //populating Allroms array
-            foreach (StashKey key in sks.stashkeys)
-                if (!AllRoms.Contains(key.RomFile))
-                    AllRoms.Add(key.RomFile);
+			//populating Allroms array
+			foreach (StashKey key in sks.stashkeys)
+				if (!AllRoms.Contains(key.RomFile))
+				{
+					AllRoms.Add(key.RomFile);
+
+					if(key.RomFile.ToUpper().Contains(".CUE"))
+						AllRoms.Add(key.RomFile.Substring(0, key.RomFile.Length -4) + ".bin");
+				}
 
             //clean temp2 folder
             foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP2"))
@@ -177,9 +182,9 @@ namespace RTC
             foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP"))
                 File.Delete(file);
 
-            //sending back filtered files from temp2 folder
+            //sending back filtered files from temp2 folder to temp
             foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP2"))
-                File.Copy(file, RTC_Core.rtcDir + "\\TEMP\\" + (file.Substring(file.LastIndexOf("\\") + 1, file.Length - (file.LastIndexOf("\\") + 1))));
+                File.Move(file, RTC_Core.rtcDir + "\\TEMP\\" + (file.Substring(file.LastIndexOf("\\") + 1, file.Length - (file.LastIndexOf("\\") + 1))));
 
             //clean temp2 folder again
             foreach (string file in Directory.GetFiles(RTC_Core.rtcDir + "\\TEMP2"))
@@ -209,7 +214,9 @@ namespace RTC
             string[] stringargs = { "-c", sks.Filename, RTC_Core.rtcDir + "\\TEMP\\" };
             FastZipProgram.Exec(stringargs);
 
-            Load(sks.Filename, true); //Reload file after for test and clean
+
+			//Imagine how long would it be with isos in that shit
+            //Load(sks.Filename, true); //Reload file after for test and clean
 
         }
 

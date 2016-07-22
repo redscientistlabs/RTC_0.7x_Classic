@@ -40,7 +40,7 @@ namespace RTC
         {
             RTC_MemoryZones.RefreshDomains();
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         public void btnManualBlast_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace RTC
         {
             RTC_HellgenieEngine.ClearCheats();
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         public void btnAutoCorrupt_Click(object sender, EventArgs e)
@@ -123,7 +123,7 @@ namespace RTC
             RTC_Core.IteratorSteps = Convert.ToInt32(nmIteratorSteps.Value);
 
             RTC_Core.tfForm.RecalculateCorruptFactor();
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         public void nmIteratorSteps_ValueChanged(object sender, EventArgs e)
@@ -135,7 +135,7 @@ namespace RTC
             RTC_Core.IteratorSteps = Convert.ToInt32(nmIteratorSteps.Value);
 
             RTC_Core.tfForm.RecalculateCorruptFactor();
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         public void track_Intensity_Scroll(object sender, EventArgs e)
@@ -149,7 +149,7 @@ namespace RTC
             RTC_Core.ghForm.nmIntensity.Value = track_Intensity.Value;
 
             RTC_Core.tfForm.RecalculateCorruptFactor();
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         public void nmIntensity_ValueChanged(object sender, EventArgs e)
@@ -163,7 +163,7 @@ namespace RTC
             RTC_Core.ghForm.nmIntensity.Value = nmIntensity.Value;
 
             RTC_Core.tfForm.RecalculateCorruptFactor();
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void cbBlastRadius_SelectedIndexChanged(object sender, EventArgs e)
@@ -226,7 +226,7 @@ namespace RTC
         {
             RTC_MemoryZones.SelectDomains();
 
-            RTC_Restore.SaveRestore();
+            //RTC_Restore.SaveRestore();
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)

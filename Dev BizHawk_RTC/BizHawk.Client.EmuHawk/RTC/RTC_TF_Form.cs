@@ -97,12 +97,14 @@ namespace RTC
             {
                 pnTopPanel.BackColor = Color.Black;
                 this.BackColor = Color.Black;
-            }
+				pnLogo.BackColor = Color.Black;
+			}
             else
             {
                 pnTopPanel.BackColor = Color.MidnightBlue;
                 this.BackColor = Color.MidnightBlue;
-            }
+				pnLogo.BackColor = Color.MidnightBlue;
+			}
 
             RTC_Restore.SaveRestore();
 
