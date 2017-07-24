@@ -4,7 +4,8 @@
 
 The Real-Time Corruptor Mod for BizHawk is a ROM/RAM/BUS Corruptor for emulated games. It is deeply attached mod to the Open Source BizHawk Emulator that works by corrupting data into virtual memory chips of emulated systems. The mod itself can be played like a game on top of emulated games as completing the game while the corruption occurs is in itself a challenge. 
 
-Features:
+### Features
+
 - Corrupts in real-time
 - Works with all of Bizhawk's emulated systems
 - Multiple corruption engines with customizable algorithms
